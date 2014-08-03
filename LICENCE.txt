@@ -1,0 +1,44 @@
+PLEASE READ CAREFULLY BEFORE USING VERTEX:
+
+This licence agreement (Licence) is a legal agreement between you (Licensee or you) and the University of Newcastle Upon of Tyne of King’s Gate, Newcastle upon Tyne, NE1 7RU (Licensor, us or we) for Vertex Brain Tissue Simulation Software (“Software”);
+
+We licence use of the Software to you on the basis of this Licence. We do not sell the Software to you. We remain the owners of the Software at all times.
+
+IMPORTANT NOTICE TO ALL USERS:
+
+• BY DOWNLOADING THE SOFTWARE YOU AGREE TO THE TERMS OF THIS LICENCE WHICH WILL BIND YOU. THE TERMS OF THIS LICENCE INCLUDE, IN PARTICULAR, LIMITATION ON LIABILITY IN CONDITION 2 AND CONDITION 3.
+
+• IF YOU DO NOT AGREE TO THE TERMS OF THIS LICENCE, WE WILL NOT LICENCE THE SOFTWARE TO YOU.
+
+GRANT AND TERMS OF LICENCE
+
+1. In consideration of you agreeing to abide by the terms of this Licence, we hereby grant you a non-exclusive, non-transferable licence to use the Software on the terms of this Licence.
+
+2. The Software is distributed “AS IS” under this Licence solely for non-commercial use in the hope that it will be useful, but in order that the Licensor as a charitable organisation protects its assets for the benefit of its educational and research purposes, the Licensor makes clear that no condition is made or to be implied, nor is any warranty given or to be implied, as to the accuracy of the Software, or that it will be suitable for any particular purpose or for use under any specific conditions. Furthermore, the Licensor disclaims all responsibility for the use which is made of the Software. It further disclaims any liability for the outcomes arising from using the Software.
+
+3. The Licensee agrees to indemnify the Licensor and hold the Licensor harmless from and against any and all claims, damages and liabilities asserted by third parties (including claims for negligence) which arise directly or indirectly from the use of the Software or the sale of any products based on the Software.
+
+4. No part of the Software may be reproduced, modified, transmitted or transferred in any form or by any means, electronic or mechanical, without the express permission of the Licensor. The permission of the Licensor is not required if the said reproduction, modification, transmission or transference is done without financial return, the conditions of this Licence are imposed upon the receiver of the product, and all original and amended source code is included in any transmitted product. You may be held legally responsible for any copyright infringement that is caused or encouraged by your failure to abide by these terms and conditions.
+
+5. You are not permitted under this Licence to use this Software commercially. Use for which any financial return is received shall be defined as commercial use, and includes (1) integration of all or part of the source code or the Software into a product for sale or licence by or on behalf of Licensee to third parties or (2) use of the Software or any derivative of it for research with the final aim of developing software products for sale or licence to a third party or (3) use of the Software or any derivative of it for research with the final aim of developing non-software products for sale or licence to a third party, or (4) use of the Software to provide any service to an external organisation for which payment is received. If you are interested in using the Software commercially, please contact SAgE Enterprise to negotiate a licence. Contact details are:
+Graeme C Young
+Business Development Manager
+SAgE Enterprise
+Newcastle University
+Devonshire Building
+Newcastle upon Tyne
+NE1 7RU
+Email: sage.enterprise@ncl.ac.uk
+GENERAL
+
+6. We may transfer our rights and obligations under this Licence to another organization, but this will not affect your rights or our obligations under this Licence.
+
+7. You may not transfer your rights or your obligations under this Licence to another person.
+
+8. This Licence constitutes the entire agreement between us and supersedes and extinguishes all previous agreements, assurances, warranties, representations and understandings between us, whether written or oral, relating to the subject matter. You agree that you shall have no remedies in respect of any statement, representation, assurance or warranty (whether made innocently or negligently) that is not set out in this Licence. You agree that you shall have no claim for innocent or negligent misrepresentation or negligent misstatement based on any statement in this Licence.
+
+9. If we fail to insist that you perform your obligations under this Licence, or if we do not enforce our rights against you, or if we delay in doing so, that will not mean that we have waived our rights against you and will not mean that you do not have to comply with those obligations.
+
+10. Each of the conditions of this Licence operates separately. If any court or competent authority decides that any of them are unlawful or unenforceable, the remaining conditions will remain in full force and effect.
+
+11. This Licence shall be governed by and construed in accordance with the laws of England and we both hereby agree to submit to the non-exclusive jurisdiction of the English Courts.

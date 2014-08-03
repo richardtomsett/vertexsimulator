@@ -1,0 +1,7 @@
+Release notes/change log for VERTEX
+
+See also the README file
+
+--------- Version 0.9 (Jun 14) ---------
+
+First public release, as described in the paper but with added random number seeding control
