@@ -1,5 +1,5 @@
 function [] = simulate(TP, NP, SS, RS, IDMap, ...
-                       NeuronModel, SynModel, InModel, RecVar, synArr, wArr, synMap)
+                       NeuronModel, SynModel, InModel, RecVar, lineSourceModCell, synArr, wArr, synMap)
 
 outputDirectory = RS.saveDir;
 
@@ -59,7 +59,7 @@ for simStep = 1:simulationSteps
       % for LFP:
       if RS.LFP && NP(iGroup).numCompartments ~= 1
         RecVar = ...
-          updateLFPRecording(RS,NeuronModel,RecVar,iGroup,recTimeCounter);
+          updateLFPRecording(RS,NeuronModel,RecVar,lineSourceModCell,iGroup,recTimeCounter);
       end
     end
     
@@ -165,3 +165,6 @@ for simStep = 1:simulationSteps
     end
   end
 end % end of simulation time loop
+if isfield(RS,'LFPoffline') && RS.LFPoffline
+  save(outputDirectory, 'LineSourceConsts.mat', lineSourceModCell);
+end

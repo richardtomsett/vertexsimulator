@@ -1,6 +1,6 @@
 function [] = ...
   simulateParallel(TP, NP, SS, RS, ...
-    IDMap, NeuronModel, SynModel, InModel, RecVar, synArr, wArr, synMap)
+    IDMap, NeuronModel, SynModel, InModel, RecVar, lineSourceModCell, synArr, wArr, synMap)
 
 outputDirectory = RS.saveDir;
 
@@ -29,10 +29,6 @@ end
 [cpexLoopTotal, partnerLab] = cpexGetExchangePartners();
 
 spmd
-  %if isfield(RecVar, 'lineSourceModCell')
-  %  lineSourceModCell = RecVar.lineSourceModCell;
-   % RecVar.lineSourceModCell = [];
-  %end
   recordIntra = RecVar.recordIntra;
   comCount = SS.minDelaySteps;
   % vars to keep track of where we are in recording buffers:
@@ -72,7 +68,7 @@ spmd
         % for LFP:
         if RS.LFP && NP(iGroup).numCompartments ~= 1
           RecVar = ...
-            updateLFPRecording(RS,NeuronModel,RecVar,iGroup,recTimeCounter);
+            updateLFPRecording(RS,NeuronModel,RecVar,lineSourceModCell,iGroup,recTimeCounter);
         end
       end
     end % for each group
@@ -190,6 +186,6 @@ spmd
   end % end of simulation time loop
   
   if isfield(RS,'LFPoffline') && RS.LFPoffline
-    saveDataSPMD(outputDirectory, 'LineSourceConsts_.mat', RecVar.lineSourceModCell);
+    saveDataSPMD(outputDirectory, 'LineSourceConsts_.mat', lineSourceModCell);
   end
 end % spmd

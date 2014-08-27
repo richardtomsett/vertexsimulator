@@ -76,6 +76,9 @@ classdef NeuronModel < handle
           end
         end
       end
+      if first % no synapses to update, so return 0
+        I_syn = 0;
+      end
     end
     
     function [I_input] = sumInputCurrents(IM)

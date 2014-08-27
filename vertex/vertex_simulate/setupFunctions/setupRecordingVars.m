@@ -1,4 +1,5 @@
-function [RS, RecordingVars] = setupRecordingVars(TP, NP, SS, RS, IDMap, LSM)
+function [RS, RecordingVars, lineSourceModCell] = ...
+  setupRecordingVars(TP, NP, SS, RS, IDMap, LSM)
 
 groupBoundaryIDArr = TP.groupBoundaryIDArr;
 neuronInGroup = createGroupsFromBoundaries(groupBoundaryIDArr);
@@ -67,7 +68,6 @@ if RS.LFP
         end
       end
       RecordingVars.LFPRecording = LFPRecording;
-      RecordingVars.lineSourceModCell = lineSourceModCell;
     end
   else
     LFPRecording = cell(TP.numGroups, 1);
@@ -89,10 +89,11 @@ if RS.LFP
       end
     end
     RecordingVars.LFPRecording = LFPRecording;
-    RecordingVars.lineSourceModCell = lineSourceModCell;
   end % if parallelSim
   RS.numElectrodes = numElectrodes;
-end % if LFP
+else % if LFP
+  lineSourceModCell = {};
+end
 
 % for spikes
 if SS.parallelSim

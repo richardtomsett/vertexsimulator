@@ -72,17 +72,19 @@ else
   InputModelArr = [];
 end
 
-[RS, RecordingVars] = ...
+[RS, RecordingVars, lineSourceModCell] = ...
   setupRecordingVars(TP, NP, SS, RS, NeuronIDMap, electrodes);
 
 [synapsesArrSim, weightArr] = prepareSynapsesAndWeights(TP,CP,SS,connections);
 
 if SS.parallelSim
   simulateParallel(TP, NP, SS, RS, NeuronIDMap, NeuronModelArr, ...
-    SynapseModelArr, InputModelArr, RecordingVars, synapsesArrSim, weightArr, synMapCell);
+    SynapseModelArr, InputModelArr, RecordingVars, lineSourceModCell, ...
+    synapsesArrSim, weightArr, synMapCell);
 else
   simulate(TP, NP, SS, RS, NeuronIDMap, NeuronModelArr, ...
-    SynapseModelArr, InputModelArr, RecordingVars, synapsesArrSim, weightArr, synMapCell);
+    SynapseModelArr, InputModelArr, RecordingVars, lineSourceModCell, ...
+    synapsesArrSim, weightArr, synMapCell);
 end
   
 parameterCell = {TP, NP, CP, RS, SS};
