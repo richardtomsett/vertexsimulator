@@ -14,11 +14,16 @@ classdef SynapseModel_g_exp < SynapseModel
   end
   
   methods
-    function SM = SynapseModel_g_exp(Neuron, CP, SimulationSettings, ...
+    function SM = SynapseModel_g_exp(Neuron, CP, synType, SimulationSettings, ...
                                      postID, number)
       SM = SM@SynapseModel(Neuron, number);
-      SM.E_reversal = CP.E_reversal{postID};
-      SM.tau = CP.tau{postID};
+      if synType == 0
+        SM.E_reversal = CP.E_reversal{postID};
+        SM.tau = CP.tau{postID};
+      else
+        SM.E_reversal = CP.E_reversal{postID}{synType};
+        SM.tau = CP.tau{postID}{synType};
+      end
       SM.bufferCount = 1;
       maxDelaySteps = SimulationSettings.maxDelaySteps;
       numComparts = Neuron.numCompartments;

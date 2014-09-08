@@ -11,10 +11,14 @@ classdef SynapseModel_i_exp < SynapseModel
   end
   
   methods
-    function SM = SynapseModel_i_exp(Neuron, CP, SimulationSettings, ...
+    function SM = SynapseModel_i_exp(Neuron, CP, synType, SimulationSettings, ...
                                      postID, number)
       SM = SM@SynapseModel(Neuron, number);
-      SM.tau = CP.tau{postID};
+      if synType == 0
+        SM.tau = CP.tau{postID};
+      else
+        SM.tau = CP.tau{postID}{synType};
+      end
       SM.bufferCount = 1;
       maxDelaySteps = SimulationSettings.maxDelaySteps;
       numComparts = Neuron.numCompartments;
