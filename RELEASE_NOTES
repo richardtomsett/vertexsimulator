@@ -2,6 +2,14 @@ Release notes/change log for VERTEX
 
 See also the README file
 
+--------- Version 0.911 (Aug 27) ---------
+
+Added possibility to modify runSimulation() to allow multiple simulation runs within runSimulation(), with model parameters changing but dynamical variables not being reset between runs
+
+--------- Version 0.91 (Aug 27) ---------
+
+Added neuronDynamics() function for testing neurone model dynamics prior to a network simulation. Also added step current input model
+
 --------- Version 0.9 (Jun 14) ---------
 
 First public release, as described in the paper but with added random number seeding control

@@ -93,7 +93,7 @@ classdef InputModel_i_ou < InputModel
     function I = getRecordingVar(IM)
       I = IM.I_input;
     end
-    
+
   end % methods
   
   methods(Static)

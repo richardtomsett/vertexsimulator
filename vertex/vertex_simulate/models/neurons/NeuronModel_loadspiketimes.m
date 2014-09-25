@@ -35,6 +35,10 @@ classdef NeuronModel_loadspiketimes < NeuronModel
       spikes = NM.spikes;
     end
     
+    function NM = set.simulationStepCounter(NM, simStep)
+      NM.simulationStepCounter = simStep;
+    end
+    
   end % methods
   
   methods(Static)

@@ -1,6 +1,6 @@
-function [] = ...
+function [NeuronModel, SynModel, InModel, numSaves] = ...
   simulateParallel(TP, NP, SS, RS, ...
-    IDMap, NeuronModel, SynModel, InModel, RecVar, lineSourceModCell, synArr, wArr, synMap)
+    IDMap, NeuronModel, SynModel, InModel, RecVar, lineSourceModCell, synArr, wArr, synMap, nsaves)
 
 outputDirectory = RS.saveDir;
 
@@ -43,6 +43,9 @@ spmd
   receivedSpikes = cell(numlabs, 2); 
   S.spikeCount = zeros(1, 1, nIntSize);
   numSaves = 1;
+  if nargin == 13
+    nsaves = 0;
+  end
   
   if S.spikeLoad
     fName = sprintf('%sRecordings%d_.mat', inputDirectory, numSaves);
@@ -170,14 +173,14 @@ spmd
     % write recorded variables to disk
     if simStep == RS.dataWriteSteps(numSaves)
       recTimeCounter = 1;
-      fName = sprintf('Recordings%d_.mat', numSaves);
+      fName = sprintf('Recordings%d_.mat', numSaves+nsaves);
       saveDataSPMD(outputDirectory, fName, RecVar);
       numSaves = numSaves + 1;
       spikeRecCounter = 1;
       
       if S.spikeLoad
         if numSaves <= length(RS.dataWriteSteps)
-          fName = sprintf('%sRecordings%d_.mat',inputDirectory,numSaves);
+          fName = sprintf('%sRecordings%d_.mat',inputDirectory,numSaves+nsaves);
           loadedSpikes = pload(fName);
           disp(size(loadedSpikes.data.spikeRecording));
         end
@@ -188,4 +191,5 @@ spmd
   if isfield(RS,'LFPoffline') && RS.LFPoffline
     saveDataSPMD(outputDirectory, 'LineSourceConsts_.mat', lineSourceModCell);
   end
+  numSaves = numSaves - 1;
 end % spmd

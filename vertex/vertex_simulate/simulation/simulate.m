@@ -1,5 +1,5 @@
-function [] = simulate(TP, NP, SS, RS, IDMap, ...
-                       NeuronModel, SynModel, InModel, RecVar, lineSourceModCell, synArr, wArr, synMap)
+function [NeuronModel, SynModel, InModel, numSaves] = simulate(TP, NP, SS, RS, IDMap, ...
+                       NeuronModel, SynModel, InModel, RecVar, lineSourceModCell, synArr, wArr, synMap, nsaves)
 
 outputDirectory = RS.saveDir;
 
@@ -22,7 +22,11 @@ spikeRecCounter = 1;
 S.spikes = zeros(TP.N * SS.minDelaySteps, 1, nIntSize);
 S.spikeStep = zeros(TP.N * SS.minDelaySteps, 1, tIntSize);
 S.spikeCount = zeros(1, 1, nIntSize);
+
 numSaves = 1;
+if nargin == 13
+  nsaves = 0;
+end
 
 simulationSteps = round(SS.simulationTime / SS.timeStep);
 
@@ -150,14 +154,14 @@ for simStep = 1:simulationSteps
   end
   if simStep == RS.dataWriteSteps(numSaves)
     recTimeCounter = 1;
-    fName = sprintf('%sRecordings%d.mat', outputDirectory, numSaves);
+    fName = sprintf('%sRecordings%d.mat', outputDirectory, numSaves+nsaves);
     save(fName, 'RecVar');
     numSaves = numSaves + 1;
     spikeRecCounter = 1;
     
     if S.spikeLoad
       if numSaves <= length(RS.dataWriteSteps)
-        fName = sprintf('%sRecordings%d.mat',inputDirectory,numSaves);
+        fName = sprintf('%sRecordings%d.mat',inputDirectory,numSaves+nsaves);
         loadedSpikes = load(fName);
         dataFieldName = fields(loadedSpikes);
         disp(size(loadedSpikes.(dataFieldName{1}).spikeRecording));
@@ -168,3 +172,4 @@ end % end of simulation time loop
 if isfield(RS,'LFPoffline') && RS.LFPoffline
   save(outputDirectory, 'LineSourceConsts.mat', lineSourceModCell);
 end
+numSaves = numSaves - 1;

@@ -1,4 +1,4 @@
-function [Results] = loadResults(saveDir)
+function [Results] = loadResults(saveDir, numRuns)
 %LOADRESULTS loads the results of a simulation run.
 %   RESULTS = LOADRESULTS(SAVEDIR) loads the simulation results saved by
 %   RUNSIMULATION. SAVEDIR is a character array (string) specifying the
@@ -27,9 +27,19 @@ function [Results] = loadResults(saveDir)
 %   including extra values that were calculated by VERTEX during
 %   initialisation such as the neuron group boundaries, and the lab index
 %   that each neuron was on if running in parallel mode.
+%
+%   RESULTS = LOADRESULTS(SAVEDIR, NUMRUNS) is for use when you have
+%   modified runSimulation() to perform several simulation runs (for example,
+%   to keep the variable values from the end of the previous simulation run
+%   but change some model parameters). NUMRUNS is the number of simulation
+%   runs you performed within your implementation of runSimulation().
 
 if ~strcmpi(saveDir(end), '/')
   saveDir = [saveDir '/'];
+end
+
+if nargin == 1
+  numRuns = 1;
 end
 
 params = load([saveDir 'parameters.mat']);
@@ -45,6 +55,7 @@ RS = params.(pFields{1}){4};
 SS = params.(pFields{1}){5};
 
 % Calculate relevant numbers for loading recordings
+SS.simulationTime = SS.simulationTime * numRuns;
 numSaves = SS.simulationTime/RS.maxRecTime;
 maxRecSamples = RS.maxRecTime * (RS.sampleRate / 1000);
 maxRecSteps = RS.maxRecTime / SS.timeStep;
