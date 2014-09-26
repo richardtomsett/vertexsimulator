@@ -175,6 +175,9 @@ spmd
     
     % write recorded variables to disk
     if simStep == RS.dataWriteSteps(numSaves)
+      if spikeRecCounter-1 ~= length(RecVar.spikeRecording)
+        RecVar.spikeRecording{end} = {[], []};
+      end
       recTimeCounter = 1;
       fName = sprintf('Recordings%d_.mat', numSaves+ns);
       saveDataSPMD(outputDirectory, fName, RecVar);

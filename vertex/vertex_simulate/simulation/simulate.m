@@ -153,6 +153,9 @@ for simStep = 1:simulationSteps
    disp(num2str(simStep * SS.timeStep));
   end
   if simStep == RS.dataWriteSteps(numSaves)
+    if spikeRecCounter-1 ~= length(RecVar.spikeRecording)
+      RecVar.spikeRecording{end} = {[], []};
+    end
     recTimeCounter = 1;
     fName = sprintf('%sRecordings%d.mat', outputDirectory, numSaves+nsaves);
     save(fName, 'RecVar');
