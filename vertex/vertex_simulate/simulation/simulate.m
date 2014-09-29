@@ -38,6 +38,9 @@ end
           
 if S.spikeLoad
   inputDirectory = SS.spikeLoadDir;
+  if ~strcmpi(inputDirectory(end), '/')
+    inputDirectory = [inputDirectory '/'];
+  end
   fName = sprintf('%sRecordings%d.mat', inputDirectory, numSaves);
   loadedSpikes = load(fName);
   dataFieldName = fields(loadedSpikes);

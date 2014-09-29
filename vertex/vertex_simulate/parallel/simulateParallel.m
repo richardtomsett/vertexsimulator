@@ -24,6 +24,9 @@ end
           
 if S.spikeLoad
   inputDirectory = SS.spikeLoadDir;
+  if ~strcmpi(inputDirectory(end), '/')
+    inputDirectory = [inputDirectory '/'];
+  end
 end
 
 [cpexLoopTotal, partnerLab] = cpexGetExchangePartners();

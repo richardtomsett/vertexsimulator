@@ -35,7 +35,7 @@ function [params, connections, electrodes] = ...
 %
 %   [PARAMS, CONNECTIONS, ELECTRODES] = INITNETWORK(TP, NP, CP, RS, SS, CONTROL)
 %   allows you to specify how far through the network initialisation
-%   process you want INITNETWORK to go. CONTROL is a structure with two
+%   process you want INITNETWORK to go. CONTROL is a structure with three
 %   possible, optional fields (if any is omitted, its default value is
 %   true).
 %   - CONTROL.init is a logical (boolean) value specifying whether to run
