@@ -1,4 +1,4 @@
-function [Results] = loadResults(saveDir, numRuns)
+function [Results] = loadResults(saveDir, combineLFPs, numRuns)
 %LOADRESULTS loads the results of a simulation run.
 %   RESULTS = LOADRESULTS(SAVEDIR) loads the simulation results saved by
 %   RUNSIMULATION. SAVEDIR is a character array (string) specifying the
@@ -28,6 +28,14 @@ function [Results] = loadResults(saveDir, numRuns)
 %   initialisation such as the neuron group boundaries, and the lab index
 %   that each neuron was on if running in parallel mode.
 %
+%   RESULTS = LOADRESULTS(SAVEDIR, NUMRUNS, COMBINELFPS) also allows you to
+%   tell LOADRESULTS whether to combine the LFP due to each group into a
+%   total compound LFP (as done by default), or whether to keep the group
+%   LFP contributions separate. If COMBINELFPS is set to true, then
+%   RESULTS.LFP will be a numGroups x 1 cell array, with each group's
+%   (postsynaptic) contribution to the LFP in each cell. The contents of
+%   the cells can be summed to get the total LFP.
+%
 %   RESULTS = LOADRESULTS(SAVEDIR, NUMRUNS) is for use when you have
 %   modified runSimulation() to perform several simulation runs (for example,
 %   to keep the variable values from the end of the previous simulation run
@@ -39,6 +47,9 @@ if ~strcmpi(saveDir(end), '/')
 end
 
 if nargin == 1
+  numRuns = 1;
+  combineLFPs = true;
+elseif nargin == 2
   numRuns = 1;
 end
 
@@ -96,7 +107,14 @@ end
 % Create matrix to store loaded LFP
 if RS.LFP
   numElectrodes = length(RS.meaXpositions(:));
-  LFP = zeros(numElectrodes, simulationSamples);
+  if combineLFPs
+    LFP = zeros(numElectrodes, simulationSamples);
+  else
+    LFP = cell(TP.numGroups, 1);
+    for iGroup = 1:TP.numGroups
+      LFP{iGroup} = zeros(numElectrodes, simulationSamples);
+    end
+  end
 else
   LFP = [];
 end
@@ -149,18 +167,29 @@ for iSaves = 1:numSaves
       lr = RecordingVars.LFPRecording;
       if LFPoffline
         for iGroup = 1:TP.numGroups
-          for iElectrode = 1:numElectrodes
-            LFP(iElectrode, sampleCount+1:sampleCount+maxRecSamples) = ...
-              LFP(iElectrode, sampleCount+1:sampleCount+maxRecSamples) +...
+          for iElec = 1:numElectrodes
+            if combineLFPs
+            LFP(iElec, sampleCount+1:sampleCount+maxRecSamples) = ...
+              LFP(iElec, sampleCount+1:sampleCount+maxRecSamples) +...
               squeeze(sum(sum( bsxfun(@times, ...
-                 lr{iGroup},LineSourceConsts{iLab}{iGroup,iElectrode}))))';
+                 lr{iGroup},LineSourceConsts{iLab}{iGroup,iElec}))))';
+            else
+              LFP{iGroup}(iElec, sampleCount+1:sampleCount+maxRecSamples) = ...
+                squeeze(sum(sum( bsxfun(@times, ...
+                 lr{iGroup},LineSourceConsts{iLab}{iGroup,iElec}))))';
+            end
           end
         end
       else
         for iGroup = 1:TP.numGroups
-          LFP(:, sampleCount+1:sampleCount+size(lr{iGroup},2)) = ...
-            LFP(:, sampleCount+1:sampleCount+size(lr{iGroup},2)) + ...
-            (lr{iGroup});
+          if combineLFPs
+            LFP(:, sampleCount+1:sampleCount+size(lr{iGroup},2)) = ...
+              LFP(:, sampleCount+1:sampleCount+size(lr{iGroup},2)) + ...
+              (lr{iGroup});
+          else
+            LFP{iGroup}(:, sampleCount+1:sampleCount+size(lr{iGroup},2)) = ...
+              (lr{iGroup});
+          end
         end
       end 
     end
