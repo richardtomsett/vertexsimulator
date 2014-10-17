@@ -14,6 +14,8 @@ function [figureHandle] = plotSpikeRaster(Results, pars)
 %   - groupBoundaryLines is either a single character or an array of RGB
 %   values to specify the colour of horizontal lines to plot to mark
 %   the boundaries of the neuron groups
+%   - neuronsToPlot is a list of the neuron IDs you want to plot the spikes
+%   of. Neurons not in this list will not have their spikes plotted.
 %   - figureID specifies the figure number to use
 %   - title, xlabel, ylabel and zlabel are strings used to provide a title,
 %   x-axis label, y-axis label and z-axis label for the figure
@@ -43,11 +45,16 @@ else
   hold on;
 end
 
+if ~isfield(pars, 'neuronsToPlot')
+  pars.neuronsToPlot = 1:Results.params.TissueParams.N;
+end
+
 neuronInGroup = createGroupsFromBoundaries( ...
   Results.params.TissueParams.groupBoundaryIDArr);
 
 for iGroup = 1:Results.params.TissueParams.numGroups
-  toPlot = neuronInGroup(Results.spikes(:,1))==iGroup;
+  toPlot = ismember(Results.spikes(:,1), pars.neuronsToPlot) & ...
+           neuronInGroup(Results.spikes(:,1))==iGroup;
   plot(Results.spikes(toPlot, 2), Results.spikes(toPlot, 1), ...
        '.', 'Color', pars.colors{iGroup});
   if isfield(pars, 'groupBoundaryLines') && ...
