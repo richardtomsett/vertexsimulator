@@ -15,10 +15,13 @@ function [figureHandle] = plotSpikeRaster(Results, pars)
 %   values to specify the colour of horizontal lines to plot to mark
 %   the boundaries of the neuron groups
 %   - neuronsToPlot is a list of the neuron IDs you want to plot the spikes
+%   - tmin and tmax are used to set the extent of the x- (time) axis, in ms
 %   of. Neurons not in this list will not have their spikes plotted.
 %   - figureID specifies the figure number to use
 %   - title, xlabel, ylabel and zlabel are strings used to provide a title,
 %   x-axis label, y-axis label and z-axis label for the figure
+%   - markerSize is the size of the markers to mark the spikes (in usual
+%   Matlab size units)
 %
 %   FIGUREHANDLE = PLOTSPIKERASTER(RESULTS, PARS) also returns the handle ID of 
 %   created figure.
@@ -47,6 +50,20 @@ end
 
 if ~isfield(pars, 'neuronsToPlot')
   pars.neuronsToPlot = 1:Results.params.TissueParams.N;
+else
+  pars.neuronsToPlot = sort(pars.neuronsToPlot);
+end
+
+if ~isfield(pars, 'tmin')
+  pars.tmin = 0;
+end
+
+if ~isfield(pars, 'tmax')
+  pars.tmax = Results.params.SimulationSettings.simulationTime;
+end
+
+if ~isfield(pars, 'markerSize')
+  pars.markerSize = 8;
 end
 
 neuronInGroup = createGroupsFromBoundaries( ...
@@ -56,7 +73,8 @@ for iGroup = 1:Results.params.TissueParams.numGroups
   toPlot = ismember(Results.spikes(:,1), pars.neuronsToPlot) & ...
            neuronInGroup(Results.spikes(:,1))==iGroup;
   plot(Results.spikes(toPlot, 2), Results.spikes(toPlot, 1), ...
-       '.', 'Color', pars.colors{iGroup});
+       '.', 'Color', pars.colors{iGroup}, 'MarkerSize', ...
+         pars.markerSize);
   if isfield(pars, 'groupBoundaryLines') && ...
      iGroup < Results.params.TissueParams.numGroups
     gbid = Results.params.TissueParams.groupBoundaryIDArr(iGroup+1);
@@ -74,7 +92,7 @@ for iGroup = 1:Results.params.TissueParams.numGroups
 end
 hold off
 
-axis([0 Results.params.SimulationSettings.simulationTime ...
+axis([pars.tmin pars.tmax ...
       0-(Results.params.TissueParams.N/100) ...
       Results.params.TissueParams.N+(Results.params.TissueParams.N/100)]);
 
