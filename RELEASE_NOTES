@@ -2,14 +2,20 @@ Release notes/change log for VERTEX
 
 See also the README file
 
---------- Version 0.911 (Aug 27) ---------
+
+--------- Version 0.91 (Nov 06 2014) ---------
+
+Added neuronDynamics() function for testing neurone model dynamics prior to a network simulation. Also added step current input model.
 
 Added possibility to modify runSimulation() to allow multiple simulation runs within runSimulation(), with model parameters changing but dynamical variables not being reset between runs
 
---------- Version 0.91 (Aug 27) ---------
+Added functionality to allow loadResults() to return the LFP due to each (postsynaptic) neurone group independently
 
-Added neuronDynamics() function for testing neurone model dynamics prior to a network simulation. Also added step current input model
+Added functionality to plotSpikeRaster to plot spikes from a subset of neurons, set the marker size, and x-axis limits
 
---------- Version 0.9 (Jun 14) ---------
+Bug fixes: fixed minor spike recording bug, corrected setRandomSeed() behaviour, corrected LFP calculation (missing minus sign means previous LFP calculations would have had the wrong sign)
+
+
+--------- Version 0.9 (Jun 14 2014) ---------
 
 First public release, as described in the paper but with added random number seeding control
