@@ -96,7 +96,6 @@ maxZOverlap = TissueProperties.maxZOverlap;
     maxZ = Z;
     maxZOverlap = [0 0];
   else
-    disp([Z, maxZOverlap(1), max(NeuronArr(iGroup).compartmentZPositionMat(:))])
     maxZ = Z + maxZOverlap(1) - ...
       max(NeuronArr(iGroup).compartmentZPositionMat(:));
   end
