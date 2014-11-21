@@ -6,7 +6,6 @@ groupBoundaryIDArr = TissueProperties.groupBoundaryIDArr;
 stripBoundaryIDArr = TissueProperties.stripBoundaryIDArr;
 numGroups = TissueProperties.numGroups;
 numStrips = TissueProperties.numStrips;
-maxZOverlap = TissueProperties.maxZOverlap;
 sliceShape = TissueProperties.sliceShape;
 groupSizeArr = TissueProperties.groupSizeArr;
 N = TissueProperties.N;
@@ -23,6 +22,7 @@ somaPositionMat = zeros(N, 4);
 somaPositionMat(:,4) = 1:N;
 
 for iGroup = 1:numGroups;
+maxZOverlap = TissueProperties.maxZOverlap;
   % List of all neuron IDs in this group
   groupInd = ...
     (groupBoundaryIDArr(iGroup) + 1):groupBoundaryIDArr(iGroup + 1);
@@ -96,6 +96,7 @@ for iGroup = 1:numGroups;
     maxZ = Z;
     maxZOverlap = [0 0];
   else
+    disp([Z, maxZOverlap(1), max(NeuronArr(iGroup).compartmentZPositionMat(:))])
     maxZ = Z + maxZOverlap(1) - ...
       max(NeuronArr(iGroup).compartmentZPositionMat(:));
   end
