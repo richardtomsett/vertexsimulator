@@ -28,7 +28,7 @@ function [Results] = loadResults(saveDir, combineLFPs, numRuns)
 %   initialisation such as the neuron group boundaries, and the lab index
 %   that each neuron was on if running in parallel mode.
 %
-%   RESULTS = LOADRESULTS(SAVEDIR, NUMRUNS, COMBINELFPS) also allows you to
+%   RESULTS = LOADRESULTS(SAVEDIR, COMBINELFPS) also allows you to
 %   tell LOADRESULTS whether to combine the LFP due to each group into a
 %   total compound LFP (as done by default), or whether to keep the group
 %   LFP contributions separate. If COMBINELFPS is set to true, then
@@ -36,7 +36,7 @@ function [Results] = loadResults(saveDir, combineLFPs, numRuns)
 %   (postsynaptic) contribution to the LFP in each cell. The contents of
 %   the cells can be summed to get the total LFP.
 %
-%   RESULTS = LOADRESULTS(SAVEDIR, NUMRUNS) is for use when you have
+%   RESULTS = LOADRESULTS(SAVEDIR, COMBINELFPS, NUMRUNS) is for use when you have
 %   modified runSimulation() to perform several simulation runs (for example,
 %   to keep the variable values from the end of the previous simulation run
 %   but change some model parameters). NUMRUNS is the number of simulation
