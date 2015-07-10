@@ -4,7 +4,7 @@ function [NeuronArr] = ...
 % Calculate passive neuron properties in correct units
 numGroups = TissueProperties.numGroups;
 for iGroup = 1:numGroups
-  if NeuronArr(iGroup).numCompartments > 1
+  if NeuronArr(iGroup).numCompartments >= 1
     l = NeuronArr(iGroup).compartmentLengthArr .* 10^-4; % in cm
     d = NeuronArr(iGroup).compartmentDiameterArr .* 10^-4; % in cm
     %if NeuronArr(iGroup).homogeneous
