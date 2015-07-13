@@ -58,4 +58,12 @@ classdef NeuronModel_adex < NeuronModel
     end
     
   end % methods
+  
+  methods(Static)
+    
+    function params = getRequiredParams()
+      params = [getRequiredParams@NeuronModel, ...
+                {'a','b','tau_w','delta_t','V_t','v_cutoff'}];
+    end
+  end
 end % classdef

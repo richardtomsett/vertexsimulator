@@ -1,20 +1,36 @@
-function [NeuronArr] = ...
-  calculatePassiveProperties(NeuronArr, TissueProperties)
+function [NP] = calculatePassiveProperties(NP, TP)
 
 % Calculate passive neuron properties in correct units
-numGroups = TissueProperties.numGroups;
+numGroups = TP.numGroups;
 for iGroup = 1:numGroups
-  if NeuronArr(iGroup).numCompartments > 1
-    l = NeuronArr(iGroup).compartmentLengthArr .* 10^-4; % in cm
-    d = NeuronArr(iGroup).compartmentDiameterArr .* 10^-4; % in cm
-    %if NeuronArr(iGroup).homogeneous
-    %if ~isfield(NeuronArr(iGroup), 'g_l')
-    R_M = NeuronArr(iGroup).R_M ./ (pi .* l .* d); % in Ohms
-    NeuronArr(iGroup).g_l = 10^9 ./ R_M; % in nanoSiemens
-    %end
-    %if ~isfield(NeuronArr(iGroup), 'g_ax')
-    R_A = (4 .* l .* NeuronArr(iGroup).R_A) ./ (pi .* d .^ 2); % in Ohms
-    parents = NeuronArr(iGroup).compartmentParentArr(:)';
+  
+  % Get the required parameters for the particular model
+  modelName = generateNeuronModelName(NP(iGroup));
+  requiredParams = eval([modelName '.getRequiredParams()']);
+
+  % if C_m is required and not supplied, calculate it
+  if sum(strcmp('C_m', requiredParams)) ~= 0 && ...
+      ( ~isfield(NP(iGroup),'C_m') || isempty(NP(iGroup).C_m) )
+    [l, d] = getDimensionsInCentimetres(NP(iGroup));
+    NP(iGroup).C_m = ...
+      NP(iGroup).C .* pi .* l .* d .* 10^6; % in nanoFarads
+  end
+  
+  % if g_l is required and not supplied, calculate it
+  if sum(strcmp('g_l', requiredParams)) ~= 0 && ...
+      ( ~isfield(NP(iGroup),'g_l') || isempty(NP(iGroup).g_l) )
+    [l, d] = getDimensionsInCentimetres(NP(iGroup));
+    R_M = NP(iGroup).R_M ./ (pi .* l .* d); % in Ohms
+    NP(iGroup).g_l = 10^9 ./ R_M; % in nanoSiemens
+  end
+  
+  % if g_ax is required and not supplied, calculate it and the adjacent
+  % compartment cell array
+  if sum(strcmp('g_ax', requiredParams)) ~= 0 && ...
+      ( ~isfield(NP(iGroup),'g_ax') || isempty(NP(iGroup).g_ax) )
+    [l, d] = getDimensionsInCentimetres(NP(iGroup));
+    R_A = (4 .* l .* NP(iGroup).R_A) ./ (pi .* d .^ 2); % in Ohms
+    parents = NP(iGroup).compartmentParentArr(:)';
     maxNumChildren = sum(parents==mode(parents));
     axialConnectionCell = cell(1, maxNumChildren+1);
     axialConnectionCell{1} = [2:length(parents); parents(2:end)];
@@ -36,16 +52,16 @@ for iGroup = 1:numGroups
       end
     end
     
-    NeuronArr(iGroup).adjCompart = axialConnectionCell;
-    NeuronArr(iGroup).g_ax = axialConductanceCell;
-    %end
-    %if ~isfield(NeuronArr(iGroup), 'C_m') || ...
-    %    length(NeuronArr(iGroup).C_m) ~= NeuronArr(iGroup).numCompartments
-    NeuronArr(iGroup).C_m = ...
-      NeuronArr(iGroup).C .* pi .* l .* d .* 10^6; % in nanoFarads
-    %end
-    %else
-    % TODO: implement heterogeneous group dynamics
-    %end
+    NP(iGroup).adjCompart = axialConnectionCell;
+    NP(iGroup).g_ax = axialConductanceCell;
   end
+
+  % TODO: implement heterogeneous group dynamics
+end
+end
+
+% convert user provided lengths and diameters from microns to cm
+function [l, d] = getDimensionsInCentimetres(NP)
+l = NP.compartmentLengthArr .* 10^-4;
+d = NP.compartmentDiameterArr .* 10^-4;
 end

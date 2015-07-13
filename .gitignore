@@ -1,1 +1,4 @@
 *.mexmaci64
+*.asv
+*.mexw64
+*.mat

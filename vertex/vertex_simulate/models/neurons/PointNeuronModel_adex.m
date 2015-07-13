@@ -56,4 +56,13 @@ classdef PointNeuronModel_adex < PointNeuronModel
       NM.w = rand(size(NM.w)) .* N.b/3;
     end
   end % methods
+  
+  methods(Static)
+    
+    function params = getRequiredParams()
+      params = [getRequiredParams@PointNeuronModel, ...
+                {'C_m','g_l','E_leak','a','b','tau_w','delta_t','V_t','v_cutoff'}];
+    end
+    
+  end
 end % classdef

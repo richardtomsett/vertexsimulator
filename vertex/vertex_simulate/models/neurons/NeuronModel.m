@@ -61,7 +61,7 @@ classdef NeuronModel < handle
   methods(Static)
     
     function params = getRequiredParams()
-      params = {'C','E_leak'};
+      params = {'C_m','g_l','g_ax','adjCompart','E_leak'};
     end
 
     function [I_syn] = sumSynapticCurrents(SM)

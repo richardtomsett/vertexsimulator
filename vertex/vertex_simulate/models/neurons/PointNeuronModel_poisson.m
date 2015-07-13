@@ -30,4 +30,12 @@ classdef PointNeuronModel_poisson < handle
     end
     
   end % methods
+  
+  methods(Static)
+    
+    function params = getRequiredParams()
+      params = [getRequiredParams@PointNeuronModel, ...
+                {'firingRate'}];
+    end
+  end
 end % classdef

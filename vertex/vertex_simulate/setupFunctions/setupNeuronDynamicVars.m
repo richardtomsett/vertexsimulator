@@ -7,16 +7,7 @@ modelCell = cell(TP.numGroups, 1);
 constructorCell = cell(TP.numGroups, 1);
 for iGroup = 1:TP.numGroups
   modelCell{iGroup} = lower(NP(iGroup).neuronModel);
-  
-  if NP(iGroup).numCompartments == 1
-    funString = ['PointNeuronModel_' modelCell{iGroup}];
-  else
-    funString = ['NeuronModel_' modelCell{iGroup}];
-  end
-  
-  if strcmp(funString(end), '_')
-    funString = funString(1:end-1);
-  end
+  funString = generateNeuronModelName(NP(iGroup));
   constructorCell{iGroup} = str2func(funString);
 end
 

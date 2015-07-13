@@ -28,4 +28,13 @@ classdef NeuronModel_poisson < NeuronModel
     end
     
   end % methods
+  
+  methods(Static)
+    
+    function params = getRequiredParams()
+      params = [getRequiredParams@NeuronModel, ...
+                {'firingRate'}];
+    end
+    
+  end
 end % classdef

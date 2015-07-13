@@ -42,6 +42,12 @@ classdef NeuronModel_loadspiketimes < NeuronModel
   end % methods
   
   methods(Static)
+
+    function params = getRequiredParams()
+      params = [getRequiredParams@NeuronModel, ...
+                {'spikeTimeFile'}];
+    end
+    
     function stMat = stCell2stMat(stCell)
       numSpikes = zeros(length(stCell),1);
       for ii = 1:length(stCell)
