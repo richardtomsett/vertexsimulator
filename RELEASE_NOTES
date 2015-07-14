@@ -3,6 +3,14 @@ Release notes/change log for VERTEX
 See also the README file
 
 
+--------- Version 0.92 (Jul 14 2015) ---------
+
+Added support for new Matlab parpool() implementation (VERTEX automatically chooses whether to use matlabpool() or parpool() based on detected Matlab version)
+
+Now allows passive parameter values to be specified per-compartment in a vector
+
+Bug fixes: fixed bug that caused z-positioning errors for neurons in some cases, fixed error leading to extra spikes being plotted by plotSpikeRaster() for parallel simulations, fixed the loadResults() documentation
+
 --------- Version 0.91 (Nov 06 2014) ---------
 
 Added neuronDynamics() function for testing neurone model dynamics prior to a network simulation. Also added step current input model.
@@ -11,7 +19,7 @@ Added possibility to modify runSimulation() to allow multiple simulation runs wi
 
 Added functionality to allow loadResults() to return the LFP due to each (postsynaptic) neurone group independently
 
-Added functionality to plotSpikeRaster to plot spikes from a subset of neurons, set the marker size, and x-axis limits
+Added functionality to plotSpikeRaster() to plot spikes from a subset of neurons, set the marker size, and x-axis limits
 
 Bug fixes: fixed minor spike recording bug, corrected setRandomSeed() behaviour, corrected LFP calculation (missing minus sign means previous LFP calculations would have had the wrong sign)
 
