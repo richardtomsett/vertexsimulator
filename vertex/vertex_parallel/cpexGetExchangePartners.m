@@ -2,10 +2,12 @@ function [cpexLoopTotal, partnerLab] = cpexGetExchangePartners()
 
 % Precalculate lab partner order for data exchange
 
-if mod(matlabpool('size'), 2) ~= 0
-  cpexLoopTotal = matlabpool('size');
+numLabs = getNumOpenLabs();
+
+if mod(numLabs, 2) ~= 0
+  cpexLoopTotal = numLabs;
 else
-  cpexLoopTotal = matlabpool('size') - 1;
+  cpexLoopTotal = numLabs - 1;
 end
 
 spmd  

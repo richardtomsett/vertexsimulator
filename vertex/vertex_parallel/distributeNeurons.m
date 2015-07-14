@@ -5,7 +5,7 @@ numGroups = TissueProperties.numGroups;
 groupBoundaryIDArr = TissueProperties.groupBoundaryIDArr;
 groupSizeArr = TissueProperties.groupSizeArr;
 N = TissueProperties.N;
-numLabs = matlabpool('size');
+numLabs = getNumOpenLabs();
 numInGroupInLab = zeros(numGroups, numLabs);
 
 % Assign neurons to labs

@@ -114,7 +114,7 @@ end
 if control.LFPconsts
   if RS.LFP
     disp('Pre-calculating LFP simulation constants...')
-    [dummy, electrodes] = setupLFPConstants(NP, RS, SS, TP);
+    [~, electrodes] = setupLFPConstants(NP, RS, SS, TP);
   else
     electrodes = {};
   end

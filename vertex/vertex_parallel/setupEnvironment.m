@@ -38,14 +38,17 @@ if SS.parallelSim
     profileName = 'local';
     SS.profileName = profileName;
   end
-
-  if matlabpool('size') == 0
+  
+  numLabs = getNumOpenLabs();
+  parFunc = getParFunc();
+  
+  if numLabs == 0
     if poolSize == -1
-      matlabpool(profileName);
+      parFunc(profileName);
     else
-      matlabpool(profileName, poolSize);
+      parFunc(profileName, poolSize);
     end
   end
   
-  SS.poolSize = matlabpool('size');
+  SS.poolSize = getNumOpenLabs();
 end

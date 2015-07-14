@@ -8,9 +8,7 @@ if SS.parallelSim
   maxDelaySteps = 0;
   % Get loop length for complete pairwise exchange algorithm given number of
   % labs in use
-  if SS.parallelSim
-    [cpexLoopTotal, partnerLab] = cpexGetExchangePartners();
-  end
+  [cpexLoopTotal, partnerLab] = cpexGetExchangePartners();
   spmd
     p_postLabConnectionCell = cell(numlabs(), 1);
     for iLab = 1:numlabs
@@ -60,7 +58,7 @@ if SS.parallelSim
   end % spmd
   
   % get max delay time
-  for iLab=1:matlabpool('size')
+  for iLab=1:getNumOpenLabs()
     maxds = p_maxDelaySteps{iLab};
     minds = p_minDelaySteps{iLab};
     maxDelaySteps = max(maxDelaySteps, maxds);

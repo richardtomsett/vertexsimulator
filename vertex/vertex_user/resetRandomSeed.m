@@ -23,14 +23,7 @@ v = ver;
 if ~any(strcmp('Parallel Computing Toolbox', {v.Name}))
   SS.parallelSim = false;
 else
-  [v, ~] = version();
-  if str2double(v(1:3)) <= 8.4
-    if matlabpool('size') == 0
-      SS.parallelSim = false;
-    else
-      SS.parallelSim = true;
-    end
-  elseif isempty(gcp('nocreate'))
+  if getNumOpenLabs() == 0
     SS.parallelSim = false;
   else
     SS.parallelSim = true;

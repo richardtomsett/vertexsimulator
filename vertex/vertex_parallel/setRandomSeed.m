@@ -7,10 +7,11 @@ else
 end
 
 if SS.parallelSim
-  rng(rs + numlabs());
+  numLabs = getNumOpenLabs();
+  rng(rs + numLabs);
   spmd
     s = RandStream.create('mrg32k3a',...
-    'NumStreams',numlabs(),'StreamIndices',labindex(),'Seed',rs + numlabs());
+    'NumStreams',numlabs(),'StreamIndices',labindex(),'Seed',rs + numLabs);
     RandStream.setGlobalStream(s);
   end
 else
