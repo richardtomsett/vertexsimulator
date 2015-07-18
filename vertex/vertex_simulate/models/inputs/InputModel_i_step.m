@@ -41,8 +41,12 @@ classdef InputModel_i_step < InputModel
       mi = N.Input(inputID).amplitude(:);
       IM.meanInput = bsxfun(@times, mi, IM.membraneAreaRatio);
       IM.count = 1;
-      IM.stepOn  = N.Input.timeOn  / timeStep;
-      IM.stepOff = N.Input.timeOff / timeStep;
+      if N.Input.timeOn <= 0
+        IM.stepOn  = 1;
+      else
+        IM.stepOn  = round(N.Input.timeOn  / timeStep);
+      end
+      IM.stepOff = round(N.Input.timeOff / timeStep);
       IM.I_input = 0;
     end
     
