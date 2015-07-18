@@ -15,6 +15,7 @@ classdef NeuronModel_loadspiketimes < NeuronModel
   methods
     function NM = NeuronModel_loadspiketimes(Neuron, number, spikeTimeCell)
       NM = NM@NeuronModel(Neuron, number);
+      NM.v = Neuron.E_leak .* ones(number, Neuron.numCompartments);
       NM.number = number;
       NM.simulationStepCounter = 1;
       NM.neuronCounter = ones(number, 1);

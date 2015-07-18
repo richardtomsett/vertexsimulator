@@ -8,6 +8,7 @@ classdef NeuronModel_passive < NeuronModel
   methods
     function NM = NeuronModel_passive(Neuron, number)
       NM = NM@NeuronModel(Neuron, number);
+      NM.v = Neuron.E_leak .* ones(number, Neuron.numCompartments);
       NM.number = number;
       NM.spikes = [];
     end

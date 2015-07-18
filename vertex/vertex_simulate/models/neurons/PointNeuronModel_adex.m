@@ -17,6 +17,7 @@ classdef PointNeuronModel_adex < PointNeuronModel
   methods
     function NM = PointNeuronModel_adex(Neuron, number)
       NM = NM@PointNeuronModel(Neuron, number);
+      NM.v = Neuron.E_leak .* ones(number, 1);
       NM.w = zeros(number, 1);
       NM.spikes = [];
     end

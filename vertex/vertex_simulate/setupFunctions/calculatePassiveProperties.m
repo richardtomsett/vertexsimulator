@@ -21,7 +21,7 @@ for iGroup = 1:numGroups
       ( ~isfield(NP(iGroup),'g_l') || isempty(NP(iGroup).g_l) )
     [l, d] = getDimensionsInCentimetres(NP(iGroup));
     R_M = NP(iGroup).R_M ./ (pi .* l .* d); % in Ohms
-    NP(iGroup).g_l = 10^9 ./ R_M; % in nanoSiemens
+    NP(iGroup).g_l = 10^9 ./ R_M; % in picoSiemens
   end
   
   % if g_ax is required and not supplied, calculate it and the adjacent

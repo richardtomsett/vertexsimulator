@@ -16,6 +16,7 @@ classdef NeuronModel_adex < NeuronModel
   methods
     function NM = NeuronModel_adex(Neuron, number)
       NM = NM@NeuronModel(Neuron, number);
+      NM.v = Neuron.E_leak .* ones(number, Neuron.numCompartments);
       NM.w = zeros(number, 1);
       NM.spikes = [];
     end

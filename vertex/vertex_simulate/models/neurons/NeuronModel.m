@@ -8,7 +8,7 @@ classdef NeuronModel < handle
   
   methods
     function NM = NeuronModel(Neuron, number)
-      NM.v = Neuron.E_leak .* ones(number, Neuron.numCompartments);
+      NM.v = zeros(number, Neuron.numCompartments);
       NM.I_ax = zeros(number, Neuron.numCompartments);
       NM.treeChildren = length(Neuron.adjCompart);
       %NM.doUpdate = true(size(NM.v, 1));

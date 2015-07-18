@@ -12,6 +12,7 @@ classdef NeuronModel_poisson < NeuronModel
   methods
     function NM = NeuronModel_poisson(Neuron, number)
       NM = NM@NeuronModel(Neuron, number);
+      NM.v = Neuron.E_leak .* ones(number, Neuron.numCompartments);
       NM.number = number;
       NM.rate = Neuron.firingRate;
       NM.spikes = [];
