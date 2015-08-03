@@ -25,12 +25,19 @@ classdef PointNeuronModel < handle
     end
     
     function [I_syn] = sumSynapticCurrents(SM)
+      first = true;
       for iSyn = 1:size(SM, 2)
-        if iSyn == 1
-          I_syn = SM{iSyn}.I_syn();
-        else
-          I_syn = I_syn + SM{iSyn}.I_syn();
+        if ~isempty(SM{iSyn})
+          if first
+            I_syn = SM{iSyn}.I_syn();
+            first = false;
+          else
+              I_syn = I_syn + SM{iSyn}.I_syn();
+          end
         end
+      end
+      if first % no synapses to update, so return 0
+        I_syn = 0;
       end
     end
     
