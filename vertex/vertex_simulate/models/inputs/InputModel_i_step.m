@@ -47,14 +47,14 @@ classdef InputModel_i_step < InputModel
         IM.stepOn  = round(N.Input.timeOn  / timeStep);
       end
       IM.stepOff = round(N.Input.timeOff / timeStep);
-      IM.I_input = 0;
+      IM.I_input(:) = 0;
     end
     
     function IM = updateInput(IM, ~)
       if IM.count == IM.stepOn
-        IM.I_input = IM.meanInput;
+        IM.I_input = repmat(IM.meanInput, size(IM.I_input, 1), 1);
       elseif IM.count == IM.stepOff
-        IM.I_input = 0;
+        IM.I_input(:) = 0;
       end
       IM.count = IM.count + 1;
     end
