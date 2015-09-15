@@ -34,12 +34,15 @@ classdef InputModel_i_step < InputModel
       end
       N.Input(inputID).meanInput = N.Input(inputID).amplitude;
       IM = IM@InputModel(N, inputID, number, compartmentsInput, subset);
-      IM = setupStepCurrent(IM, N, inputID, timeStep);
+      IM = setupStepCurrent(IM, N, inputID, timeStep, subset);
     end
     
-    function IM = setupStepCurrent(IM, N, inputID, timeStep)
+    function IM = setupStepCurrent(IM, N, inputID, timeStep, subset)
       mi = N.Input(inputID).amplitude(:);
       IM.meanInput = bsxfun(@times, mi, IM.membraneAreaRatio);
+      if size(IM.meanInput, 1) > 1
+        IM.meanInput = IM.meanInput(subset, :);
+      end
       IM.count = 1;
       if N.Input.timeOn <= 0
         IM.stepOn  = 1;
@@ -47,14 +50,14 @@ classdef InputModel_i_step < InputModel
         IM.stepOn  = round(N.Input.timeOn  / timeStep);
       end
       IM.stepOff = round(N.Input.timeOff / timeStep);
-      IM.I_input = 0;
+      IM.I_input = IM.I_input .* 0;
     end
     
     function IM = updateInput(IM, ~)
       if IM.count == IM.stepOn
-        IM.I_input = IM.meanInput;
+        IM.I_input = bsxfun(@plus, IM.I_input, IM.meanInput);
       elseif IM.count == IM.stepOff
-        IM.I_input = 0;
+        IM.I_input = IM.I_input .* 0;
       end
       IM.count = IM.count + 1;
     end
