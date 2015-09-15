@@ -21,9 +21,9 @@ classdef SynapseModel_i_exp < SynapseModel
       SM.i_expEventBuffer = zeros(number, numComparts, maxDelaySteps);
       SM.bufferMax = maxDelaySteps;
 
-      if SM.tau == 0
+      if SM.tau <= 0
         error('vertex:SynapseModel_i_exp', ...
-           'tau must not be zero');
+           'tau must be greater than zero');
       end
     end
     
