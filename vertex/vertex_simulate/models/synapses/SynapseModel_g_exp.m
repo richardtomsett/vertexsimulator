@@ -25,6 +25,11 @@ classdef SynapseModel_g_exp < SynapseModel
       SM.g_exp = zeros(number, numComparts);
       SM.g_expEventBuffer = zeros(number, numComparts, maxDelaySteps);
       SM.bufferMax = maxDelaySteps;
+
+      if SM.tau == 0
+        error('vertex:SynapseModel_g_exp', ...
+           'tau must not be zero');
+      end
     end
     
     function SM = updateBuffer(SM)

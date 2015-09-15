@@ -20,6 +20,11 @@ classdef SynapseModel_i_exp < SynapseModel
       numComparts = Neuron.numCompartments;
       SM.i_expEventBuffer = zeros(number, numComparts, maxDelaySteps);
       SM.bufferMax = maxDelaySteps;
+
+      if SM.tau == 0
+        error('vertex:SynapseModel_i_exp', ...
+           'tau must not be zero');
+      end
     end
     
     function SM = updateBuffer(SM)
