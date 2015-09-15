@@ -44,6 +44,10 @@ classdef InputModel_i_ou < InputModel
       tau = N.Input(inputID).tau;
       stdInput = N.Input(inputID).stdInput;
       
+      if any(tau == 0)
+        error('vertex:InputModel_ou:initInput', ...
+           'tau must not be zero'); 
+      end
       if size(tau, 1) ~= size(meanInput, 1)
         error('vertex:InputModel_ou:initInput', ...
            'meanInput & tau must be same size (rows)'); 
