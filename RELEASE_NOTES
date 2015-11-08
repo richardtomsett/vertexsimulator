@@ -2,6 +2,11 @@ Release notes/change log for VERTEX
 
 See also the README file
 
+--------- Version 0.93 (Nov 8 2015) ---------
+
+Added specific checks to prevent synaptic time constants being intialised to <= 0
+
+Bug fixes: fixed i_step input current problems (now works in parallel and if timeOn = 0), fixed a synaptic current summation bug for point neuron models with no synapses, fixed a bug that broke the simulation if the sample rate and maxRecTime were incompatible, fixed a bug that broke the simulation if some neuron groups had input currents specified but others didn't
 
 --------- Version 0.92 (Jul 14 2015) ---------
 
