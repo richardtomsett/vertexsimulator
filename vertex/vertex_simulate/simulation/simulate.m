@@ -75,7 +75,12 @@ for simStep = 1:simulationSteps
   % increment the recording sample counter
   if simStep == RS.samplingSteps(sampleStepCounter)
     recTimeCounter = recTimeCounter + 1;
-    sampleStepCounter = sampleStepCounter + 1;
+    
+    % Only increment sampleStepCounter if this isn't the last scheduled
+    % recording step
+    if sampleStepCounter < length(RS.samplingSteps)
+      sampleStepCounter = sampleStepCounter + 1;
+    end
   end
   
   % communicate spikes
@@ -162,7 +167,12 @@ for simStep = 1:simulationSteps
     recTimeCounter = 1;
     fName = sprintf('%sRecordings%d.mat', outputDirectory, numSaves+nsaves);
     save(fName, 'RecVar');
-    numSaves = numSaves + 1;
+    
+    % Only imcrement numSaves if this isn't the last scheduled save point.
+    if numSaves < length(RS.dataWriteSteps)
+      numSaves = numSaves + 1;
+    end
+    
     spikeRecCounter = 1;
     
     if S.spikeLoad
@@ -178,4 +188,6 @@ end % end of simulation time loop
 if isfield(RS,'LFPoffline') && RS.LFPoffline
   save(outputDirectory, 'LineSourceConsts.mat', lineSourceModCell);
 end
-numSaves = numSaves - 1;
+
+%numSaves = numSaves - 1; % - no longer need this as numSaves is not
+%updated beyond the final scheduled save point

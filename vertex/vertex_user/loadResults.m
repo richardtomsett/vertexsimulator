@@ -67,11 +67,11 @@ SS = params.(pFields{1}){5};
 
 % Calculate relevant numbers for loading recordings
 SS.simulationTime = SS.simulationTime * numRuns;
-numSaves = SS.simulationTime/RS.maxRecTime;
-maxRecSamples = RS.maxRecTime * (RS.sampleRate / 1000);
-maxRecSteps = RS.maxRecTime / SS.timeStep;
+numSaves = floor(SS.simulationTime/RS.maxRecTime);
+maxRecSamples = RS.maxRecSamples;
+maxRecSteps = RS.maxRecSteps;
 minDelaySteps = SS.minDelaySteps;
-simulationSamples = (SS.simulationTime*(RS.sampleRate / 1000));
+simulationSamples = length(RS.samplingSteps); %(SS.simulationTime*(RS.sampleRate / 1000));
 
 if SS.parallelSim
   numLabs = SS.poolSize;
