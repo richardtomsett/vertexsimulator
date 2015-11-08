@@ -42,11 +42,16 @@ classdef PointNeuronModel < handle
     end
     
     function [I_input] = sumInputCurrents(IM)
+      I_input = 0;
       for iIn = 1:size(IM, 2)
         if iIn == 1
-          I_input = IM{iIn}.I_input();
+          if ~isempty(IM{iIn})
+            I_input = IM{iIn}.I_input();
+          end
         else
-          I_input = I_input + IM{iIn}.I_input();
+          if ~isempty(IM{iIn})
+            I_input = I_input + IM{iIn}.I_input();
+          end
         end
       end
     end
