@@ -65,6 +65,15 @@ else
   control.LFPconsts = true;
 end
 
+% Convert Maps to structs if necessary
+if isNewMatlab()
+  TP = vertexMapToStruct(TP);
+  NP = vertexMapToStruct(NP, true);
+  CP = vertexMapToStruct(CP);
+  RS = vertexMapToStruct(RS);
+  SS = vertexMapToStruct(SS);
+end
+
 % Check the parameter structures for errors
 TP = checkTissueStruct(TP);
 NP = checkNeuronStruct(NP);
