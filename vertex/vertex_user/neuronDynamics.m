@@ -1,5 +1,5 @@
 function [v_m, I, NParams] = neuronDynamics(NeuronParams, pars)
-%NEURONDYNAMICS runs a simulation of a single neuron group
+%NEURONDYNAMICS runs a simulation of a single neuron group.
 %   V_M = neuronDynamics(NEURONPARAMS, PARS) creates a neuron group
 %   according to the parameters in the structure NEURONPARAMS.
 %   It then runs a simulation for the amount of time specified in the PARS

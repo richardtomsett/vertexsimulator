@@ -2,7 +2,7 @@ function figureHandle = plotSomaPositions(TP, pars)
 %PLOTSOMAPOSITIONS Plots the positions of the neurons' soma compartments.
 %   PLOTSOMAPOSITIONS(TP) creates a 3D plot of the soma positions of all
 %   neurons in the simulation. TP is the TissueParams structure in the
-%   PARAMS structure returned by INITNETWORK.
+%   PARAMS structure returned by initNetwork().
 %
 %   PLOTSOMAPOSITIONS(TP, PARS) adjusts the plot based on settings in the
 %   input PARS structure. Fields that can be specified in PARS are: toPlot,

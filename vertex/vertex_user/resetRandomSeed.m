@@ -1,5 +1,5 @@
 function [] = resetRandomSeed(s)
-%RESETRANDOMSEED Resets the random number generator seed
+%RESETRANDOMSEED Resets the random number generator seed.
 %   RESETRANDOMSEED() resets the random number generator seed to the
 %   default value, 123. If running in parallel mode, the random number
 %   generator seed will be 123 + numlabs()

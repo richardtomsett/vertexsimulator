@@ -1,7 +1,7 @@
 function [figureHandle] = plotSpikeRaster(Results, pars)
-%PLOTSPIKERASTER Creates a spike raster plot
+%PLOTSPIKERASTER Creates a spike raster plot.
 %   PLOTSPIKERASTER(RESULTS) Creates a spike raster plot given a RESULTS
-%   structure loaded using the LOADRESULTS function.
+%   structure loaded using the loadResults() function.
 %
 %   PLOTSPIKERASTER(RESULTS, PARS) adjusts the plot based on settings in the
 %   input PARS structure. Fields that can be specified in PARS are: colors,

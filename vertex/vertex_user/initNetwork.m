@@ -1,7 +1,6 @@
 function [params, connections, electrodes] = ...
   initNetwork(TP, NP, CP, RS, SS, control)
-%INITNETWORK Initialise simulation environment, setup the network and
-%calculate constants for extracellular potential simulation.
+%INITNETWORK Initialise simulation environment, setup the network and calculate constants for extracellular potential simulation.
 %
 %   [PARAMS, CONNECTIONS, ELECTRODES] = INITNETWORK(TP, NP, CP, RS, SS)
 %   sets up the simulation environment according to the simulation settings
@@ -14,7 +13,7 @@ function [params, connections, electrodes] = ...
 %   potential calculation (if the extracellular potential is being
 %   simulated). PARAMS is a structure with fields TissueParams,
 %   NeuronParams, ConnectionParams, RecordingSettings and
-%   SimulationSettings, that will be passed to the RUNSIMULATION function.
+%   SimulationSettings, that will be passed to the runSimulation() function.
 %   In serial mode, CONNECTIONS is an N by 3 cell array containing connectivity
 %   information, where N is the total number of neurons. The first column
 %   of the cell array contains lists of postsynaptic neuron IDs for each
@@ -31,7 +30,7 @@ function [params, connections, electrodes] = ...
 %   each compartment in that neuron for that electrode. In parallel mode,
 %   ELECTRODES is a composite containing the electrode cell array for the
 %   neurons in each lab. PARAMS, CONNECTIONS and ELECTRODES can then be
-%   used as inputs to the RUNSIMULATION function.
+%   used as inputs to the runSimulation() function.
 %
 %   [PARAMS, CONNECTIONS, ELECTRODES] = INITNETWORK(TP, NP, CP, RS, SS, CONTROL)
 %   allows you to specify how far through the network initialisation

@@ -3,9 +3,9 @@ function [sparseConnectivity] = getSparseConnectivity(params, connections)
 %   SPARSECONNECTIVITY = GETSPARSECONNECTIVITY(PARAMS, CONNECTIONS)
 %   calculates a sparse matrix representation of the connections between
 %   all the neurons in the model. The first input parameter PARAMS - is the
-%   parameter structure returned by INITNETWORK. The second parameter 
+%   parameter structure returned by initNetwork(). The second parameter 
 %   CONNECTIONS is the connection cell array (serial mode) or composite 
-%   (parallel mode) returned by INITNETWORK. Rows in the returned sparse
+%   (parallel mode) returned by initNetwork(). Rows in the returned sparse
 %   matrix represent the IDs of presynaptic neurons and columns the IDs of
 %   postsynaptic neurons. If neuron i synapses onto synapse j, then
 %   SPARSECONNECTIVITY(i,j) will contain the number of synapses made from i

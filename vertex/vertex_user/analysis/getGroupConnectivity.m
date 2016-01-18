@@ -3,11 +3,11 @@ function [total, convergent, divergent] = ...
 %GETGROUPCONNECTIVITY Get the number of connections between neuron groups.
 %   TOTAL = GETGROUPCONNECTIVITY(PARAMS, CONNECTIVITY) returns the total
 %   number of synapses made between each neuron group. The first input parameter
-%   PARAMS - is the parameter structure returned by INITNETWORK. The second
+%   PARAMS - is the parameter structure returned by initNetwork(). The second
 %   parameter CONNECTIVITY is either the connection cell array (serial mode) or
-%   composite (parallel mode) returned by INITNETWORK, or the sparse
-%   connectivity matrix returned by GETSPARSECONNECTIVITY. TOTAL is a
-%   square matrix of size equal to PARAMS.TISSUEPROPERTIES.NUMGROUPS, where
+%   composite (parallel mode) returned by initNetwork(), or the sparse
+%   connectivity matrix returned by getSparseConnectivity(). TOTAL is a
+%   square matrix of size equal to PARAMS.TissueProperties.numGroups, where
 %   rows represent postsynaptic groups and columns presynaptic groups.
 %
 %   [TOTAL, CONVERGENT, DIVERGENT] = GETGROUPCONNECTIVITY(PARAMS, CONNECTIVITY)
