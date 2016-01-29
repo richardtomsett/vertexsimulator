@@ -47,6 +47,7 @@ if S.spikeLoad
 end
 
 recordIntra = RecVar.recordIntra;
+recordI_syn = RecVar.recordI_syn;
   
 % simulation loop
 for simStep = 1:simulationSteps
@@ -61,6 +62,12 @@ for simStep = 1:simulationSteps
       if recordIntra
         RecVar = ...
           updateIntraRecording(NeuronModel,RecVar,iGroup,recTimeCounter);
+      end
+      
+      % for synaptic currents:
+      if recordI_syn
+        RecVar = ...
+          updateI_synRecording(SynModel,RecVar,iGroup,recTimeCounter);
       end
       
       % for LFP:

@@ -39,6 +39,7 @@ end
 
 spmd
   recordIntra = RecVar.recordIntra;
+  recordI_syn = RecVar.recordI_syn;
   comCount = SS.minDelaySteps;
   % vars to keep track of where we are in recording buffers:
 
@@ -72,6 +73,12 @@ spmd
         if recordIntra
           RecVar = ...
             updateIntraRecording(NeuronModel,RecVar,iGroup,recTimeCounter);
+        end
+        
+        % for synaptic currents:
+        if recordI_syn
+          RecVar = ...
+            updateI_synRecording(SynModel,RecVar,iGroup,recTimeCounter);
         end
         
         % for LFP:

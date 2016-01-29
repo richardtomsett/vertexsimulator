@@ -43,6 +43,40 @@ else
   RecordingVars.recordIntra = recordIntra;
 end
 
+% Synaptic current recording:
+if SS.parallelSim
+  I_SynRecLab = SS.neuronInLab(RS.I_syn);
+  spmd
+    if ismember(labindex(), unique(I_SynRecLab))
+      recordI_syn = true;
+      p_I_synRecModelIDArr = RS.I_syn(I_SynRecLab == labindex());
+      p_I_synRecCellIDArr = ...
+        IDMap.modelIDToCellIDMap(p_I_synRecModelIDArr, :);
+      p_numToRecordI_syn = size(p_I_synRecModelIDArr, 1);
+      p_I_synRecording = zeros(p_numToRecordI_syn, TP.numGroups, RS.maxRecSamples);
+      
+      RecordingVars.I_synRecCellIDArr = p_I_synRecCellIDArr;
+      RecordingVars.I_synRecording = p_I_synRecording;
+    else
+      recordI_syn = false;
+    end
+    RecordingVars.recordI_syn = recordI_syn;
+  end
+else
+  if ~isempty(RS.I_syn)
+    recordI_syn = true;
+    I_synRecCellIDArr = IDMap.modelIDToCellIDMap(RS.I_syn, :);
+    numToRecordI_syn = size(I_synRecCellIDArr, 1);
+    I_synRecording = zeros(numToRecordI_syn, TP.numGroups, RS.maxRecSamples);
+    
+    RecordingVars.I_synRecCellIDArr = I_synRecCellIDArr;
+    RecordingVars.I_synRecording = I_synRecording;
+  else
+    recordI_syn = false;
+  end
+  RecordingVars.recordI_syn = recordI_syn;
+end
+
 % for LFPs:
 if RS.LFP
   if SS.parallelSim

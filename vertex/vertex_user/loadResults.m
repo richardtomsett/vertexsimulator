@@ -1,7 +1,7 @@
 function [Results] = loadResults(saveDir, combineLFPs, numRuns)
 %LOADRESULTS loads the results of a simulation run.
 %   RESULTS = LOADRESULTS(SAVEDIR) loads the simulation results saved by
-%   RUNSIMULATION. SAVEDIR is a character array (string) specifying the
+%   runSimulation(). SAVEDIR is a character array (string) specifying the
 %   directory where the simulation results were saved. RESULTS is a
 %   structure with several fields that store the loaded results.
 %
@@ -86,6 +86,13 @@ else
   v_m = false;
 end
 
+% Has I_syn been recorded?
+if isfield(RS, 'I_syn')
+  I_syn = RS.I_syn;
+else
+  I_syn = false;
+end
+
 % Are we to calculate the LFP offline?
 if isfield(RS, 'LFPoffline') && RS.LFPoffline
   LFPoffline = true;
@@ -121,15 +128,29 @@ end
 
 % Create matrix to store loaded v_m
 if v_m
-  intracellular = zeros(length(RS.v_m), simulationSamples);
+  v_m_recording = zeros(length(RS.v_m), simulationSamples);
   if SS.parallelSim
     intraCount = 0;
     intraIDmap = zeros(length(v_m), 1);
   end
 else
-  intracellular = [];
+  v_m_recording = [];
 end
 spikeCell = cell(numSaves*ceil(maxRecSteps / minDelaySteps), 1);
+
+% Create matrix to store loaded I_syn
+if I_syn
+  I_syn_recording = cell(TP.numGroups, 1);
+  for iGroup=1:TP.numGroups
+    I_syn_recording{iGroup} = zeros(length(RS.I_syn), simulationSamples);
+  end
+  if SS.parallelSim
+    I_synCount = 0;
+    I_synIDmap = zeros(length(I_syn), 1);
+  end
+else
+  I_syn_recording = [];
+end
 
 sampleCount = 0;
 
@@ -147,12 +168,12 @@ for iSaves = 1:numSaves
     ff = fields(loadedData);
     RecordingVars = loadedData.(ff{1});
     
-    % Load LFP
+    % Load
     if v_m
       if SS.parallelSim
         if isfield(RecordingVars, 'intraRecording')
           ir = RecordingVars.intraRecording;
-          intracellular(intraCount+1:intraCount+size(ir,1), ...
+          v_m_recording(intraCount+1:intraCount+size(ir,1), ...
             sampleCount+1:sampleCount+size(ir, 2)) = ir;
           intraID = find(SS.neuronInLab(v_m) == iLab);
           intraIDmap(intraCount+1:intraCount+size(intraID)) = intraID;
@@ -160,7 +181,28 @@ for iSaves = 1:numSaves
         end
       else
         ir = RecordingVars.intraRecording;
-        intracellular(:, sampleCount+1:sampleCount+size(ir, 2)) = ir;
+        v_m_recording(:, sampleCount+1:sampleCount+size(ir, 2)) = ir;
+      end
+    end
+    if I_syn
+      if SS.parallelSim
+        if isfield(RecordingVars, 'I_synRecording')
+          i_Syn = RecordingVars.I_synRecording;
+          for iGroup = 1:TP.numGroups
+            I_syn_recording{iGroup}(I_synCount+1:I_synCount+size(i_Syn,1), ...
+              sampleCount+1:sampleCount+size(i_Syn, 3)) = ...
+              squeeze(i_Syn(:,iGroup,:));
+          end
+          I_synID = find(SS.neuronInLab(I_syn) == iLab);
+          I_synIDmap(I_synCount+1:I_synCount+size(I_synID)) = I_synID;
+          I_synCount = I_synCount+size(i_Syn,1);
+        end
+      else
+        i_Syn = RecordingVars.I_synRecording;
+        for iGroup = 1:TP.numGroups
+          I_syn_recording{iGroup}(:, sampleCount+1:sampleCount+size(i_Syn, 3)) = ...
+            squeeze(i_Syn(:,iGroup,:));
+        end
       end
     end
     if RS.LFP
@@ -218,13 +260,19 @@ for iSaves = 1:numSaves
 end % numSaves
 
 spikes = cell2mat(spikeCell);
-if SS.parallelSim && ~isempty(intracellular)
-  intracellular(intraIDmap, :) = intracellular;
+if SS.parallelSim && ~isempty(v_m_recording)
+  v_m_recording(intraIDmap, :) = v_m_recording;
+end
+if SS.parallelSim && ~isempty(I_syn_recording)
+  for iGroup = 1:TP.numGroups
+    I_syn_recording{iGroup}(I_synIDmap, :) = I_syn_recording{iGroup};
+  end
 end
 % Store loaded results in cell array to return
 Results.spikes = spikes;
 Results.LFP = LFP; 
-Results.v_m = intracellular;
+Results.v_m = v_m_recording;
+Results.I_syn = I_syn_recording;
 Results.params.TissueParams = TP;
 Results.params.NeuronParams = NP;
 Results.params.ConnectionParams = CP;
