@@ -1,11 +1,11 @@
 function [chosenTargets] = ...
-  chooseTargetPostNeurons(CP, SS, iPreGroup, iLayer, synapsesInLayer, ...
-                          distsSquared)
+  chooseTargetPostNeurons(CP, SS, iPreGroup, iPostGroup, iLayer, ...
+                          synapsesInLayer, distsSquared)
                       
 if ~isfield(CP(iPreGroup), 'allowMultipleSynapses')
     allowMultiSyn = SS.multiSyn;
   else
-    allowMultiSyn = CP(iPreGroup).allowMultipleSynapses{iPost};
+    allowMultiSyn = CP(iPreGroup).allowMultipleSynapses{iPostGroup};
 end
 
 numPotentialTargets = size(distsSquared, 1);

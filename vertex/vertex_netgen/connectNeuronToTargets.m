@@ -37,8 +37,8 @@ for iPostGroup = 1:TP.numGroups
       % only go further if this number is > 0
       if synapsesInLayer ~= 0
 
-        chosenTargets = chooseTargetPostNeurons(CP,SS,iPreGroup,iLayer, ...
-          synapsesInLayer,distancesSquared);
+        chosenTargets = chooseTargetPostNeurons(CP,SS,iPreGroup,iPostGroup, ...
+          iLayer, synapsesInLayer,distancesSquared);
 
         % get the absolute IDs, for the chosen postsynaptic targets
         chosenIDs = potentialTargetXYZArr(chosenTargets, 4);
