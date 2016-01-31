@@ -2,6 +2,20 @@ Release notes/change log for VERTEX
 
 See also the README file
 
+--------- Version 0.94 (Feb 1 2016) ---------
+
+Added ability to specify parameters in Matlab Map objects as well as structures (the Map is converted to a struct internally).
+
+Added to the help system: functions to print info on physical units and to print a list of available user functions
+
+Added ability to record synaptic currents on a per (postsynaptic) neuron basis
+
+Added tutorial 8 (introducing the neuronDynamics() function)
+
+Updated tutorial 1
+
+Bug fixes: fixed a bug in specifying whether multiple pre-post synapses per neuron are allowed, fixed bug that broke the simulation if the user did not specify to record v_m or I_syn in RecordingSettings
+
 --------- Version 0.93 (Nov 8 2015) ---------
 
 Added specific checks to prevent synaptic time constants being intialised to <= 0
