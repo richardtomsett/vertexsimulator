@@ -4,9 +4,19 @@ function [RS, RecordingVars, lineSourceModCell] = ...
 groupBoundaryIDArr = TP.groupBoundaryIDArr;
 neuronInGroup = createGroupsFromBoundaries(groupBoundaryIDArr);
 
-if RS.LFP
+if isfield(RS, 'LFP') && RS.LFP
   numElectrodes = length(RS.meaXpositions(:));
   RS.numElectrodes = numElectrodes;
+else
+  RS.LFP = false;
+end
+
+if ~isfield(RS, 'v_m')
+  RS.v_m = [];
+end
+
+if ~isfield(RS, 'I_syn')
+  RS.I_syn = [];
 end
 
 % Intracellular recording:
