@@ -16,7 +16,39 @@
 % structures or structure arrays.
 %
 % In this tutorial, we will walk through the different parameter settings
-% for creating a single group of neurons that synapses with itself.
+% for creating a single group of neurons that synapses with itself. Before
+% we start though, we'll quickly go through VERTEX's built-in help
+% features.
+%
+% If you need a list of all the functions available to you in VERTEX, you
+% can run the vertexFunctions() function, which prints all available
+% functions with a brief description of what they do:
+
+vertexFunctions
+
+%%
+% To get more in-depth help on a function, type help and then the function
+% name just like a built-in Matlab function. For example, to see details of
+% for the runSimulation() function, we enter:
+
+help runSimulation
+
+%%
+% If you need to check the physical units used in VERTEX, run the
+% vertexUnits() function, which prints out a list of physical quantities
+% with their associated units and a representative example:
+
+vertexUnits
+
+%%
+% If you're really lost and forget the names of these functions, you can
+% remind yourself by simply running vertexSimulator:
+
+vertexSimulator
+
+%%
+% Now that we've covered the built-in help, we can move on to setting up
+% and running a simulation.
 
 %% Tissue Parameters
 % We start with the structure array holding the overall information about

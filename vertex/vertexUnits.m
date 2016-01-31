@@ -2,7 +2,7 @@ function [] = vertexUnits()
 %VERTEXUNITS Displays information about the units used by VERTEX.
 disp('  Units used by VERTEX: ')
 disp(' ')
-disp('       Electric potential:            milliVolts              (e.g. leak potentail E_leak)')
+disp('       Electric potential:            milliVolts              (e.g. leak potential E_leak)')
 disp('              Conductance:           nanoSiemens              (e.g. synaptic conductance weight)')
 disp('                  Current:             picoAmps               (e.g. synaptic current weight)')
 disp('      Specific resistance:     Ohm * square centimetres       (e.g. specific membrane resistance R_M)')
