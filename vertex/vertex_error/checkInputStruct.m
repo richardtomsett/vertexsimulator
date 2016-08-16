@@ -6,7 +6,7 @@ numInputs = length(IP);
 
 for iIn = 1:numInputs
   
-  checkStructFields(IP, {'inputType'}, {'char'});
+  checkStructFields(IP(iIn), {'inputType'}, {'char'});
   
   className = IP(iIn).inputType;
   
