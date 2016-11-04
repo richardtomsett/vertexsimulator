@@ -122,12 +122,14 @@ end
 if control.LFPconsts
   if RS.LFP
     disp('Pre-calculating LFP simulation constants...')
-    [~, electrodes] = setupLFPConstants(NP, RS, SS, TP);
+    [compartmentPositions, electrodes] = setupLFPConstants(NP, RS, SS, TP);
   else
     electrodes = {};
+    compartmentPositions = {};
   end
 else
   electrodes = {};
+  compartmentPositions = {};
 end
 
 % Store the parameters in a single params structure
@@ -136,6 +138,7 @@ params.NeuronParams = NP;
 params.ConnectionParams = CP;
 params.RecordingSettings = RS;
 params.SimulationSettings = SS;
+params.TissueParams.compartmentPositions = compartmentPositions;
 disp('Model successfully initialised!');
 
 

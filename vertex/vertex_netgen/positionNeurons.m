@@ -1,32 +1,33 @@
-function [TissueProperties] = positionNeurons(NeuronArr, TissueProperties)
+function [TP] = positionNeurons(NP, TP)
 
-layerBoundaryArr  = TissueProperties.layerBoundaryArr;
+layerBoundaryArr  = TP.layerBoundaryArr;
 layerThicknessArr = abs(diff(layerBoundaryArr));
-groupBoundaryIDArr = TissueProperties.groupBoundaryIDArr;
-stripBoundaryIDArr = TissueProperties.stripBoundaryIDArr;
-numGroups = TissueProperties.numGroups;
-numStrips = TissueProperties.numStrips;
-sliceShape = TissueProperties.sliceShape;
-groupSizeArr = TissueProperties.groupSizeArr;
-N = TissueProperties.N;
+groupBoundaryIDArr = TP.groupBoundaryIDArr;
+stripBoundaryIDArr = TP.stripBoundaryIDArr;
+numGroups = TP.numGroups;
+numStrips = TP.numStrips;
+sliceShape = TP.sliceShape;
+groupSizeArr = TP.groupSizeArr;
+N = TP.N;
 if strcmp(sliceShape, 'cylinder')
-  R = TissueProperties.R;
+  R = TP.R;
 elseif strcmp(sliceShape, 'cuboid')
-  X = TissueProperties.X;
-  Y = TissueProperties.Y;
+  X = TP.X;
+  Y = TP.Y;
 end
-Z = TissueProperties.Z;
+Z = TP.Z;
 
 % Generate neuron positions
 somaPositionMat = zeros(N, 4);
 somaPositionMat(:,4) = 1:N;
+stretchFactor = ones(N, 1);
 
-for iGroup = 1:numGroups;
-maxZOverlap = TissueProperties.maxZOverlap;
+for iGroup = 1:numGroups
+  maxZOverlap = TP.maxZOverlap;
   % List of all neuron IDs in this group
   groupInd = ...
     (groupBoundaryIDArr(iGroup) + 1):groupBoundaryIDArr(iGroup + 1);
-  iGroupLayer = NeuronArr(iGroup).somaLayer;
+  iGroupLayer = NP(iGroup).somaLayer;
   
   if strcmp(sliceShape, 'cuboid')
     for iStrip = 1:numStrips
@@ -69,7 +70,7 @@ maxZOverlap = TissueProperties.maxZOverlap;
         spm(stripInd{1},1:2);
       count = count+sum(stripInd{1},1);
       iStripAdjust = 2 + ((iGroup - 1) * numStrips);
-      TissueProperties.stripBoundaryIDArr(iStripAdjust) = count;
+      TP.stripBoundaryIDArr(iStripAdjust) = count;
       for iStrip = 2:numStrips
         stripInd{iStrip} = spm(:,1).^2 + spm(:,2).^2<=Rstrip(iStrip)^2 &...
                            spm(:,1).^2 + spm(:,2).^2> Rstrip(iStrip-1)^2;
@@ -77,7 +78,7 @@ maxZOverlap = TissueProperties.maxZOverlap;
           spm(stripInd{iStrip},1:2);
         count = count + sum(stripInd{iStrip});
         iStripAdjust = iStrip+1 + ((iGroup - 1) * numStrips);
-        TissueProperties.stripBoundaryIDArr(iStripAdjust) = count;
+        TP.stripBoundaryIDArr(iStripAdjust) = count;
       end
     end
     
@@ -87,17 +88,17 @@ maxZOverlap = TissueProperties.maxZOverlap;
   % compartments do not go further than maxZOverlap outside the slice Z
   % boundaries
   if maxZOverlap(1) < 0
-    maxZOverlap(1) = 100000;
+    maxZOverlap(1) = max(NP(iGroup).compartmentZPositionMat(:));
   end
   if maxZOverlap(2) < 0
-    maxZOverlap(2) = 100000;
+    maxZOverlap(2) = abs(min(NP(iGroup).compartmentZPositionMat(:)));
   end
-  if NeuronArr(iGroup).numCompartments == 1
+  if NP(iGroup).numCompartments == 1
     maxZ = Z;
     maxZOverlap = [0 0];
   else
     maxZ = Z + maxZOverlap(1) - ...
-      max(NeuronArr(iGroup).compartmentZPositionMat(:));
+      max(NP(iGroup).compartmentZPositionMat(:));
   end
   if maxZ < layerBoundaryArr(iGroupLayer)
     layerBoundaryArr(iGroupLayer) = maxZ;
@@ -111,7 +112,17 @@ maxZOverlap = TissueProperties.maxZOverlap;
   end
   somaPositionMat(groupInd,3) = layerBoundaryArr(iGroupLayer) - ...
     rand(groupSizeArr(iGroup), 1) * layerThicknessArr(iGroupLayer);
+
+  % Stretch neurons along the z-axis, if specified
+  if isfield(NP(iGroup), 'stretchZ') && NP(iGroup).stretchZ
+      neuronMaxZ = somaPositionMat(groupInd, 3) + ...
+          max(NP(iGroup).compartmentZPositionMat(:));
+      neuronMaxZ(neuronMaxZ == 0) = 1; % should never happen...
+      stretchFactor(groupInd) = ...
+          (layerBoundaryArr(iGroupLayer)+maxZOverlap(1)) ./ neuronMaxZ;
+  end
 end
 
-TissueProperties.somaPositionMat = somaPositionMat;
-TissueProperties.rotationAngleMat = 2 * pi * rand(N, 3);
+TP.somaPositionMat = somaPositionMat;
+TP.rotationAngleMat = 2 * pi * rand(N, 3);
+TP.stretchFactor = stretchFactor;
