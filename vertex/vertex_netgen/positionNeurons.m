@@ -114,12 +114,14 @@ for iGroup = 1:numGroups
     rand(groupSizeArr(iGroup), 1) * layerThicknessArr(iGroupLayer);
 
   % Stretch neurons along the z-axis, if specified
-  if isfield(NP(iGroup), 'stretchZ') && NP(iGroup).stretchZ
+  if isfield(NP(iGroup), 'stretchZ') && ...
+          ~isempty(NP(iGroup).stretchZ) && ...
+          NP(iGroup).stretchZ
       neuronMaxZ = somaPositionMat(groupInd, 3) + ...
           max(NP(iGroup).compartmentZPositionMat(:));
       neuronMaxZ(neuronMaxZ == 0) = 1; % should never happen...
       stretchFactor(groupInd) = ...
-          (layerBoundaryArr(iGroupLayer)+maxZOverlap(1)) ./ neuronMaxZ;
+          (layerBoundaryArr(1)+maxZOverlap(1)) ./ neuronMaxZ;
   end
 end
 
