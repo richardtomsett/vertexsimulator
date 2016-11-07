@@ -80,6 +80,8 @@ for iGroup = 1:numGroups
         iStripAdjust = iStrip+1 + ((iGroup - 1) * numStrips);
         TP.stripBoundaryIDArr(iStripAdjust) = count;
       end
+    else
+      somaPositionMat(groupInd,1:2) = spm(:,1:2);
     end
     
   end
