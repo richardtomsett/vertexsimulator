@@ -5,7 +5,7 @@ classdef SynapseModel_i_alpha < SynapseModel
   
   properties (SetAccess = protected)
     tau
-    i_expEventBuffer
+    i_alphaEventBuffer
     i_aux
     bufferCount
     bufferMax
@@ -19,7 +19,7 @@ classdef SynapseModel_i_alpha < SynapseModel
       SM.bufferCount = 1;
       maxDelaySteps = SimulationSettings.maxDelaySteps;
       numComparts = Neuron.numCompartments;
-      SM.i_expEventBuffer = zeros(number, numComparts, maxDelaySteps);
+      SM.i_alphaEventBuffer = zeros(number, numComparts, maxDelaySteps);
       SM.i_aux = SM.I_syn;
       SM.bufferMax = maxDelaySteps;
 
@@ -31,9 +31,9 @@ classdef SynapseModel_i_alpha < SynapseModel
     
     function SM = updateBuffer(SM)
       SM.i_aux = SM.i_aux - ...
-            SM.i_expEventBuffer(:, :, SM.bufferCount);
+            SM.i_alphaEventBuffer(:, :, SM.bufferCount);
           
-      SM.i_expEventBuffer(:, :, SM.bufferCount) = 0;
+      SM.i_alphaEventBuffer(:, :, SM.bufferCount) = 0;
       SM.bufferCount = SM.bufferCount + 1;
       
       if SM.bufferCount > SM.bufferMax
@@ -54,11 +54,11 @@ classdef SynapseModel_i_alpha < SynapseModel
     end
     
     function SM = bufferIncomingSpikes(SM, synIndeces, weightsToAdd)
-%       if size(SM.i_expEventBuffer(synIndeces), 1) ~= size(weightsToAdd, 1)
+%       if size(SM.i_alphaEventBuffer(synIndeces), 1) ~= size(weightsToAdd, 1)
 %         weightsToAdd = weightsToAdd';
 %       end
-      SM.i_expEventBuffer(synIndeces) = ...
-                            SM.i_expEventBuffer(synIndeces) + weightsToAdd;
+      SM.i_alphaEventBuffer(synIndeces) = ...
+                            SM.i_alphaEventBuffer(synIndeces) + weightsToAdd;
     end
     
     function SM = randomInit(SM, i_mean, i_std)
