@@ -1,28 +1,24 @@
 function [compartmentPositions, LineSourceModifierArr] = ...
-  calculateLineSourceModifiers(storeCompartmentPositions, ...
-  NeuronArr, ...
-  RecordingInfo, ...
-  SimulationSettings, ...
-  TissueProperties)
+  calculateLineSourceModifiers(storeCompartmentPositions, NP, RS, SS, TP)
 %CALCULATELINESOURCEMODIFIERS Calculate the constants required by the
 %line-source method (assume point source soma compartments). Method adapted
 %from LFPy (Linden et al 2014).
 
 neuronInGroup = ...
-  createGroupsFromBoundaries(TissueProperties.groupBoundaryIDArr);
-N = TissueProperties.N;
-sigma = TissueProperties.tissueConductivity * 1000;
-electrodePositionArr = RecordingInfo.electrodePositionArr;
-rLimit = RecordingInfo.minDistToElectrodeTip;
+  createGroupsFromBoundaries(TP.groupBoundaryIDArr);
+N = TP.N;
+sigma = TP.tissueConductivity * 1000;
+electrodePositionArr = RS.electrodePositionArr;
+rLimit = RS.minDistToElectrodeTip;
 compartmentPositions = cell(N, 3);
 LineSourceModifierArr  = cell(N, size(electrodePositionArr, 1));
-somaPositionMat = TissueProperties.somaPositionMat(:, 1:3);
-rotationAngleMat = TissueProperties.rotationAngleMat;
+somaPositionMat = TP.somaPositionMat(:, 1:3);
+rotationAngleMat = TP.rotationAngleMat;
 
 % If running in parallel, if this is lab 1, then display progress
-if SimulationSettings.parallelSim
+if SS.parallelSim
   printProg = labindex() == 1;
-  neuronInThisLab = find(SimulationSettings.neuronInLab == labindex);
+  neuronInThisLab = find(SS.neuronInLab == labindex);
 else
   printProg = true;
   neuronInThisLab = 1:N;
@@ -37,24 +33,24 @@ end
 for ii = 1:length(neuronInThisLab)
   iNeuron = neuronInThisLab(ii);
   iGroup = neuronInGroup(iNeuron);
-  numCompartments = NeuronArr(iGroup).numCompartments;
+  numCompartments = NP(iGroup).numCompartments;
   if numCompartments > 1
     somaPosition = somaPositionMat(iNeuron, :);
-    if ~isfield(NeuronArr(iGroup), 'axisAligned')
+    if ~isfield(NP(iGroup), 'axisAligned')
       rot = rotationAngleMat(iNeuron, :);
-    elseif strcmpi(NeuronArr(iGroup).axisAligned, 'x')
+    elseif strcmpi(NP(iGroup).axisAligned, 'x')
       rot = [rotationAngleMat(iNeuron, 1) 0 0];
-    elseif strcmpi(NeuronArr(iGroup).axisAligned, 'y')
+    elseif strcmpi(NP(iGroup).axisAligned, 'y')
       rot = [0 rotationAngleMat(iNeuron, 2) 0];
-    elseif strcmpi(NeuronArr(iGroup).axisAligned, 'z')
+    elseif strcmpi(NP(iGroup).axisAligned, 'z')
       rot = [0 0 rotationAngleMat(iNeuron, 3)];
     else
       rot = rotationAngleMat(iNeuron, :);
     end
-    xPos = NeuronArr(iGroup).compartmentXPositionMat(:, :);
-    yPos = NeuronArr(iGroup).compartmentYPositionMat(:, :);
-    zPos = NeuronArr(iGroup).compartmentZPositionMat(:, :);
-    deltaS = NeuronArr(iGroup).compartmentLengthArr(:);
+    xPos = NP(iGroup).compartmentXPositionMat(:, :);
+    yPos = NP(iGroup).compartmentYPositionMat(:, :);
+    zPos = NP(iGroup).compartmentZPositionMat(:, :);
+    deltaS = NP(iGroup).compartmentLengthArr(:);
     
     for iCompartment = 1:numCompartments
       xyzNewBottom = rotate3DCoordinates( [xPos(iCompartment, 1) ...
@@ -66,6 +62,18 @@ for ii = 1:length(neuronInThisLab)
       xPos(iCompartment, :) = [xyzNewBottom(1) xyzNewTop(1)];
       yPos(iCompartment, :) = [xyzNewBottom(2) xyzNewTop(2)];
       zPos(iCompartment, :) = [xyzNewBottom(3) xyzNewTop(3)];
+      
+      % if the compartment is above the soma, stretch the compartment
+      % according to the relevant stretch factor
+      if NP(iGroup).compartmentZPositionMat(iCompartment,2) > 0
+          if NP(iGroup).compartmentZPositionMat(iCompartment,1) > 0
+            zPos(iCompartment, :) = ...
+                zPos(iCompartment, :) .* TP.stretchFactor(iNeuron);
+          else
+            zPos(iCompartment, 2) = ...
+                zPos(iCompartment, 2) .* TP.stretchFactor(iNeuron);
+          end
+      end
     end
     xMid = xPos(:, 1) + (xPos(:, 2) - xPos(:, 1)) ./ 2;
     yMid = yPos(:, 1) + (yPos(:, 2) - yPos(:, 1)) ./ 2;
