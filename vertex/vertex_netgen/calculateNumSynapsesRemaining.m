@@ -2,7 +2,10 @@ function [numSynapses] = ...
   calculateNumSynapsesRemaining(CP, TP, somaPositionMat, number, neuronInGroup)
 
 ratioRemaining = ones(number, TP.numLayers);
-numSynapses = zeros(number, TP.numLayers, TP.numGroups, 'uint16');
+numSynapses = cell(TP.numLayers, 1);
+for iLayer = 1:TP.numLayers
+  numSynapses{iLayer} = zeros(number, TP.numGroups);
+end
 for iPreGroup = 1:TP.numGroups
   inGroup = neuronInGroup == iPreGroup;
   if isfield(CP(iPreGroup), 'sliceSynapses') && ...
@@ -25,7 +28,7 @@ for iPreGroup = 1:TP.numGroups
   end
   preC = cell2mat(CP(iPreGroup).numConnectionsToAllFromOne')';
   for iLayer = 1:TP.numLayers
-    numSynapses(inGroup, iLayer, :) = ...
-      bsxfun(@times, ratioRemaining(inGroup, iLayer), preC(iLayer, :));
+    numSynapses{iLayer}(inGroup, :) = ...
+      round(bsxfun(@times,ratioRemaining(inGroup,iLayer),preC(iLayer, :)));
   end
 end

@@ -3,21 +3,26 @@ function [targetIDs, targetComparts, targetDelays] = ...
 
 % Calculate remaining number of synapses after slicing, and allocate
 % memory to store synapses for each presynaptic neuron
-iPreNumSyn = squeeze(numSynapses(iPreInLab, :, :));
-if TP.numLayers == 1
-  iPreNumSyn = iPreNumSyn';
+iPreNumSyn = cell(TP.numLayers, 1);
+numSynapsesPerPostGroup = zeros(1, TP.numGroups);
+for iLayer = 1:TP.numLayers
+  iPreNumSyn{iLayer} = numSynapses{iLayer}(iPreInLab, :);
+  numSynapsesPerPostGroup = numSynapsesPerPostGroup + iPreNumSyn{iLayer};
 end
+%if TP.numLayers == 1
+%  iPreNumSyn = iPreNumSyn';
+%end
 
 % Pre-allocate memory to store synapse information for each neuron
-targetIDs = zeros(1, sum(iPreNumSyn(:)), SS.nIDintSize);
-targetComparts = zeros(1, sum(iPreNumSyn(:)), 'uint8');
-targetDelays = zeros(1, sum(iPreNumSyn(:)));
+targetIDs = zeros(1, sum(numSynapsesPerPostGroup(:)), SS.nIDintSize);
+targetComparts = zeros(1, sum(numSynapsesPerPostGroup(:)), 'uint8');
+targetDelays = zeros(1, sum(numSynapsesPerPostGroup(:)));
 
 % var to keep track of how many synapses have been made, so that we can
 % preallocate memory rather than expanding arrays every time:
 numSynapsesCounter = 0;
 for iPostGroup = 1:TP.numGroups
-  if sum(iPreNumSyn(:, iPostGroup)) ~= 0
+  if numSynapsesPerPostGroup(iPostGroup) ~= 0
     iPostGroupOffset = TP.groupBoundaryIDArr(iPostGroup);
     % Get all neurons of the relevant type
     potentialTargetXYZArr = TP.somaPositionMat( ...
@@ -33,7 +38,7 @@ for iPostGroup = 1:TP.numGroups
     for iLayer = 1:TP.numLayers
       %find the number of synapses made with the postsynaptic group in
       %the current layer
-      synapsesInLayer = iPreNumSyn(iLayer, iPostGroup);
+      synapsesInLayer = iPreNumSyn{iLayer}(iPostGroup);
       % only go further if this number is > 0
       if synapsesInLayer ~= 0
 
