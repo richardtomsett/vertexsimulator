@@ -138,7 +138,12 @@ params.NeuronParams = NP;
 params.ConnectionParams = CP;
 params.RecordingSettings = RS;
 params.SimulationSettings = SS;
-params.TissueParams.compartmentPositions = compartmentPositions;
+if isfield(SS,'storeCompartmentPositions') ...
+    && ~isempty(SS.storeCompartmentPositions) ...
+    && SS.storeCompartmentPositions
+  params.TissueParams.compartmentPositions = compartmentPositions;
+end
+
 disp('Model successfully initialised!');
 
 

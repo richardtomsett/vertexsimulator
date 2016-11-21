@@ -86,44 +86,56 @@ for iGroup = 1:numGroups
     
   end
   
-  % Set z-positions randomly within layer boudaries AND so that neuron
-  % compartments do not go further than maxZOverlap outside the slice Z
-  % boundaries
-  if maxZOverlap(1) < 0
-    maxZOverlap(1) = max(NP(iGroup).compartmentZPositionMat(:));
+  somaLengthAdjustment = max(abs(NP(iGroup).compartmentZPositionMat(1,:)));
+  if (layerThicknessArr(iGroupLayer) <= somaLengthAdjustment)
+    somaLengthAdjustment = 0;
   end
-  if maxZOverlap(2) < 0
-    maxZOverlap(2) = abs(min(NP(iGroup).compartmentZPositionMat(:)));
-  end
-  if NP(iGroup).numCompartments == 1
-    maxZ = Z;
-    maxZOverlap = [0 0];
-  else
-    maxZ = Z + maxZOverlap(1) - ...
-      max(NP(iGroup).compartmentZPositionMat(:));
-  end
-  if maxZ < layerBoundaryArr(iGroupLayer)
-    layerBoundaryArr(iGroupLayer) = maxZ;
-    layerThicknessArr = abs(diff(layerBoundaryArr));
-    %TissueProperties.layerBoundaryArr = layerBoundaryArr;
-  end
-  if -maxZOverlap(2) > layerBoundaryArr(iGroupLayer + 1)
-    layerBoundaryArr(end) = maxZOverlap(2);
-    layerThicknessArr = abs(diff(layerBoundaryArr));
-    %TissueProperties.layerBoundaryArr = layerBoundaryArr;
-  end
-  somaPositionMat(groupInd,3) = layerBoundaryArr(iGroupLayer) - ...
-    rand(groupSizeArr(iGroup), 1) * layerThicknessArr(iGroupLayer);
-
   % Stretch neurons along the z-axis, if specified
   if isfield(NP(iGroup), 'stretchZ') && ...
           ~isempty(NP(iGroup).stretchZ) && ...
           NP(iGroup).stretchZ
+      
+      somaPositionMat(groupInd,3) = layerBoundaryArr(iGroupLayer) - ...
+      rand(groupSizeArr(iGroup), 1) * (layerThicknessArr(iGroupLayer) - somaLengthAdjustment);
+    
       neuronMaxZ = somaPositionMat(groupInd, 3) + ...
           max(NP(iGroup).compartmentZPositionMat(:));
       neuronMaxZ(neuronMaxZ == 0) = 1; % should never happen...
       stretchFactor(groupInd) = ...
           (layerBoundaryArr(1)+maxZOverlap(1)) ./ neuronMaxZ;
+  else
+    % Set z-positions randomly within layer boudaries AND so that neuron
+    % compartments do not go further than maxZOverlap outside the slice Z
+    % boundaries
+    if maxZOverlap(1) < 0
+      maxZOverlap(1) = max(NP(iGroup).compartmentZPositionMat(:));
+    end
+    if maxZOverlap(2) < 0
+      maxZOverlap(2) = abs(min(NP(iGroup).compartmentZPositionMat(:)));
+    end
+    if NP(iGroup).numCompartments == 1
+      maxZ = Z;
+      maxZOverlap = [0 0];
+    else
+      maxZ = Z + maxZOverlap(1) - ...
+        max(NP(iGroup).compartmentZPositionMat(:));
+    end
+    if maxZ < layerBoundaryArr(iGroupLayer)
+      layerBoundaryArr(iGroupLayer) = maxZ;
+      layerThicknessArr = abs(diff(layerBoundaryArr));
+      %TissueProperties.layerBoundaryArr = layerBoundaryArr;
+    end
+    if -maxZOverlap(2) > layerBoundaryArr(iGroupLayer + 1)
+      layerBoundaryArr(end) = maxZOverlap(2);
+      layerThicknessArr = abs(diff(layerBoundaryArr));
+      %TissueProperties.layerBoundaryArr = layerBoundaryArr;
+    end
+    
+    somaPositionMat(groupInd,3) = layerBoundaryArr(iGroupLayer) - ...
+      rand(groupSizeArr(iGroup), 1) * (layerThicknessArr(iGroupLayer) - somaLengthAdjustment);
+    
+    %somaPositionMat(groupInd,3) = layerBoundaryArr(iGroupLayer) - ...
+    %  rand(groupSizeArr(iGroup), 1) * layerThicknessArr(iGroupLayer);
   end
 end
 
