@@ -58,10 +58,3 @@ for iGroup = 1:numGroups
 
   % TODO: implement heterogeneous group dynamics
 end
-end
-
-% convert user provided lengths and diameters from microns to cm
-function [l, d] = getDimensionsInCentimetres(NP)
-l = NP.compartmentLengthArr .* 10^-4;
-d = NP.compartmentDiameterArr .* 10^-4;
-end
