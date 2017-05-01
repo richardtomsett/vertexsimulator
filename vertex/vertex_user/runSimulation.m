@@ -70,7 +70,11 @@ end
   setupNeuronDynamicVars(TP, NP, SS, NeuronIDMap, loadedSpikeTimeCell);
 
 % Initialise the synapse models
-[SynapseModelArr, synMapCell] = setupSynapseDynamicVars(TP, NP, CP, SS);
+recordingI_syn = false;
+if isfield(RS, 'I_syn') && ~isempty(RS.I_syn)
+  recordingI_syn = true;
+end
+[SynapseModelArr, synMapCell] = setupSynapseDynamicVars(TP, NP, CP, SS, recordingI_syn);
 
 % Initialise the input models (if any)
 if isfield(NP, 'Input')
@@ -81,7 +85,7 @@ end
 
 % Initialise the recording variables
 [RS, RecordingVars, lineSourceModCell] = ...
-  setupRecordingVars(TP, NP, SS, RS, NeuronIDMap, electrodes);
+  setupRecordingVars(TP, NP, SS, RS, NeuronIDMap, electrodes, SynapseModelArr);
 
 % Prepare synapses and synaptic weights. 
 [synapsesArrSim, weightArr] = prepareSynapsesAndWeights(TP,CP,SS,connections);

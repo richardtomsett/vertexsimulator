@@ -1,5 +1,5 @@
 function [RS, RecordingVars, lineSourceModCell] = ...
-  setupRecordingVars(TP, NP, SS, RS, IDMap, LSM)
+  setupRecordingVars(TP, NP, SS, RS, IDMap, LSM, SynapseModelArr)
 
 groupBoundaryIDArr = TP.groupBoundaryIDArr;
 neuronInGroup = createGroupsFromBoundaries(groupBoundaryIDArr);
@@ -63,7 +63,7 @@ if SS.parallelSim
       p_I_synRecCellIDArr = ...
         IDMap.modelIDToCellIDMap(p_I_synRecModelIDArr, :);
       p_numToRecordI_syn = size(p_I_synRecModelIDArr, 1);
-      p_I_synRecording = zeros(p_numToRecordI_syn, TP.numGroups, RS.maxRecSamples);
+      p_I_synRecording = zeros(p_numToRecordI_syn, size(SynapseModelArr,2), RS.maxRecSamples);
       
       RecordingVars.I_synRecCellIDArr = p_I_synRecCellIDArr;
       RecordingVars.I_synRecording = p_I_synRecording;
@@ -77,7 +77,7 @@ else
     recordI_syn = true;
     I_synRecCellIDArr = IDMap.modelIDToCellIDMap(RS.I_syn, :);
     numToRecordI_syn = size(I_synRecCellIDArr, 1);
-    I_synRecording = zeros(numToRecordI_syn, TP.numGroups, RS.maxRecSamples);
+    I_synRecording = zeros(numToRecordI_syn, size(SynapseModelArr,2), RS.maxRecSamples);
     
     RecordingVars.I_synRecCellIDArr = I_synRecCellIDArr;
     RecordingVars.I_synRecording = I_synRecording;

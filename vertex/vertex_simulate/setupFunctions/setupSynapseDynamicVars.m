@@ -1,4 +1,4 @@
-function [SynapseModelArr, synMapCell] = setupSynapseDynamicVars(TP, NP, CP, SS)
+function [SynapseModelArr, synMapCell] = setupSynapseDynamicVars(TP, NP, CP, SS, recordingI_syn)
 
 paramsMapCell = cell(TP.numGroups,1);
 synMapCell = cell(TP.numGroups,1);
@@ -12,7 +12,11 @@ for iPost = 1:TP.numGroups
       for iP = 1:length(params)
         model = [model, num2str(CP(iPre).(params{iP}){iPost})];
       end
-      postSynDetails{iPre} = model;
+      if recordingI_syn
+        postSynDetails{iPre} = [model, num2str(iPre), num2str(iPost)];
+      else
+        postSynDetails{iPre} = model;
+      end
     else
       postSynDetails{iPre} = '';
     end

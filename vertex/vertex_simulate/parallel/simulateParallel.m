@@ -78,7 +78,7 @@ spmd
         % for synaptic currents:
         if recordI_syn
           RecVar = ...
-            updateI_synRecording(SynModel,RecVar,iGroup,recTimeCounter);
+            updateI_synRecording(SynModel,synMap,RecVar,iGroup,recTimeCounter);
         end
         
         % for LFP:
