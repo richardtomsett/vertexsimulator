@@ -1,4 +1,36 @@
-function [spikeTimes, c] = distributedGenerator(N_0, N, rate, simTime, timeStep)
+function [spikeTimes, c] = ...
+  distributedGenerator(N_0, N, rate, simTime, timeStep)
+%DISTRIBUTEDGENERATOR Generate spike trains according to distributed
+%generator algorithm (Rudolph & Destexhe, 2006)
+%
+%   [spikeTimes, c] = distributedGenerator(N_0, N, rate, simTime, timeStep)
+%   generates spike trains according to the distributed generator algorithm
+%   with the specified parameters, and returns them in a format suitable
+%   for loading in VERTEX simulations (by specifying a neuron population of
+%   model type 'loadtpiketimes').
+%
+%   N spike trains of mean rate RATE (Hz) and length SIMTIME (ms) are 
+%   created.
+%   
+%   The algorithm first generates N_0 poisson spike trains (N_0 <= N). Then
+%   for each time step, a random sample (with replacement) of size N is
+%   taken from the N_0 spike trains at that time step. This creates a final
+%   set of N spike trains that are correlated with correlation coefficient
+%   C = ((N_0 - N) / (1 - N))^2.
+
+if (nargin ~= 5)
+  errMsg = ['You must supply five arguments: N_0, N, rate, simTime,', ... 
+            'timeStep'];
+  error('vertex:distributedGenerator:WrongNumberINputArgs', errMsg);
+elseif ( ~checkNumericPositive(N_0) || ...
+         ~checkNumericPositive(N) || ...
+         ~checkNumericPositive(rate) || ...
+         ~checkNumericPositive(simTime) || ...
+         ~checkNumericPositive(timeStep))
+  errMsg = 'All parameters must be numbers greater than 0';
+  error('vertex:distributedGenerator:checkNumericPositive', errMsg);
+end
+
 numSteps = round(simTime / timeStep);
 pool = rand(N_0, numSteps) <= (rate/1000)*timeStep;
 
@@ -14,5 +46,3 @@ for iN = 1:N
 end
 
 c = ((N_0 - N) / (1 - N))^2;
-
-%0.5*N*rate*weight^2*tau*(1 + ( (N-1)/(N+sqrt(c)*(1-N)) ))
