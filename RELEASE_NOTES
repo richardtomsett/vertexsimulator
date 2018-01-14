@@ -2,6 +2,18 @@ Release notes/change log for VERTEX
 
 See also the README file
 
+--------- Version 0.95 (Jan 14 2018) --------
+
+Added alpha-shaped synaptic currents and conductances
+
+Added functionality to slice synapses outside model boundary for cylindrical shaped models
+
+Added two utility functions for pre-generating spike trains: poissonGenerator() and distributedGenerator(). poissonGenerator() generates poisson spike trains, while distributedGenerator() generates arbitrarily correlated spike trains by selecting spikes from a pool of poisson spike trains (See Rudolph & Destexhe 2006)
+
+Adds option to "stretch" neuron morphologies according to the model Z dimension
+
+Bug fixes: fixed a bug that broke the simulation when number of neuron groups = 1, but number of layers > 1, fixed a bug affecting I_syn recording, minor fix to neuron positioning code, fixes bug throwing error if storeCompartmentPositions not specified in SimulationSettings, fixed bug in user entered structure checking for current/conductance inputs, fixed some cylindrical model bugs
+
 --------- Version 0.94 (Feb 1 2016) ---------
 
 Added ability to specify parameters in Matlab Map objects as well as structures (the Map is converted to a struct internally).
