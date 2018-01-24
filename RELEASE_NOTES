@@ -2,6 +2,10 @@ Release notes/change log for VERTEX
 
 See also the README file
 
+--------- Version 0.95b (Jan 24 2018) --------
+
+Bug fix: distributedGenerator algorithm introduced in previous release now returns correct instantaneous pairwise correlation value
+
 --------- Version 0.95 (Jan 14 2018) --------
 
 Added alpha-shaped synaptic currents and conductances

@@ -1,9 +1,9 @@
-function [spikeTimes, c] = ...
+function [spikeTimes, pairwise_corrcoeff] = ...
   distributedGenerator(N_0, N, rate, simTime, timeStep)
 %DISTRIBUTEDGENERATOR Generate spike trains according to distributed
 %generator algorithm (Rudolph & Destexhe, 2006)
 %
-%   [spikeTimes, c] = distributedGenerator(N_0, N, rate, simTime, timeStep)
+%   [spikeTimes, pairwise_corrcoeff] = distributedGenerator(N_0, N, rate, simTime, timeStep)
 %   generates spike trains according to the distributed generator algorithm
 %   with the specified parameters, and returns them in a format suitable
 %   for loading in VERTEX simulations (by specifying a neuron population of
@@ -15,8 +15,8 @@ function [spikeTimes, c] = ...
 %   The algorithm first generates N_0 poisson spike trains (N_0 <= N). Then
 %   for each time step, a random sample (with replacement) of size N is
 %   taken from the N_0 spike trains at that time step. This creates a final
-%   set of N spike trains that are correlated with correlation coefficient
-%   C = ((N_0 - N) / (1 - N))^2.
+%   set of N spike trains that are correlated with instantaneous pairwise
+%   correlation coefficient, PAIRWISE_CORRCOEFF = 1 / N_0.
 
 if (nargin ~= 5)
   errMsg = ['You must supply five arguments: N_0, N, rate, simTime,', ... 
@@ -45,4 +45,4 @@ for iN = 1:N
   spikeTimes{iN} = find(spikeOn(iN,:)) .* timeStep;
 end
 
-c = ((N_0 - N) / (1 - N))^2;
+pairwise_corrcoeff = 1 / N_0;
